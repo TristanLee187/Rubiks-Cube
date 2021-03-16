@@ -1,6 +1,7 @@
 # layer by layer cube object
 
 from cubie import *
+from moves import *
 
 class cube:
     def __init__(self):
@@ -40,11 +41,27 @@ class cube:
         # top face
         top = [[self.pieces[0][i][j].top for j in range(3)] for i in range(3)]
         for i in range(3):
-            ans+= 7*' ' + ' '.join(top[i]) + '\n'
+            ans += 8*' ' + ' '.join(top[i]) + '\n'
         ans+='\n'
 
         # left face
         left = [[self.pieces[i][j][0].left for j in range(3)] for i in range(3)]
 
-cube=cube()
-print(cube)
+        # front face
+        front = [[self.pieces[i][2][j].front for j in range(3)] for i in range(3)]
+
+        # right face
+        right = [[self.pieces[i][j][2].right for j in range(2,-1,-1)] for i in range(3)]
+
+        # back face
+        back = [[self.pieces[i][0][j].back for j in range(2,-1,-1)] for i in range(3)]
+
+        for i in range(3):
+            ans += ' '.join(left[i]) + '   ' + ' '.join(front[i]) + '   ' + ' '.join(right[i]) + '   ' + ' '.join(back[i]) + '\n'
+        ans+='\n'
+
+        # bottom face
+        bottom = [[self.pieces[2][i][j].bottom for j in range(3)] for i in range(2,-1,-1)]
+        for i in range(3):
+            ans += 8*' ' + ' '.join(bottom[i]) + '\n'
+        return ans
