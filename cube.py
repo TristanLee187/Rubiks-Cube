@@ -5,12 +5,14 @@ from moves import *
 
 class cube:
     def __init__(self):
+        # initiate the top, middle, and bottom layers
         self.pieces=[]
         for i in range(3):
             self.pieces.append([])
             for j in range(3):
                 self.pieces[-1].append(3*[0])
-        # population
+
+        # populate the layers with cubies
         for i in range(3):
             for j in range(3):
                 for k in range(3):
@@ -35,6 +37,7 @@ class cube:
                         colors[5]='B'
                     self.pieces[i][j][k]=cubie(colors)
 
+    # prints the cube in a flat format. See the cubie class for color specifications.
     def __str__(self):
         ans=''
 

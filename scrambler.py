@@ -3,6 +3,18 @@ from cube import *
 from random import choice, random
 from sys import argv
 
+# generate a random scramble of length n, with the following specifications:
+# 1) No two consecutive moves will rotate the same face, i.e., the segment "R R" and "U U2" could not
+# appear.
+# 2) For any rotation axis, the length of a contiguous segment of moves in the scramble that rotate
+# about that axis is at most 2. For example, R and L moves (as well as their prime and 180 degree
+# turn versions) both rotate about the x-axis. Therefore, the segment "R L" and "R2 L'" could appear,
+# but "R L R" and "L' R2 L" could not.
+# 3) For any point in the scramble, of the moves allowed by teh above two rules, each will be chosen with
+# equal probability. For example, if the allowed moves are [R, L, U, D], each has a 1/4 chance of being chosen.
+# 4) Each move has a 1/3 chance of being counterclockwise and 1/3 chance of being a 180 degree turn. Specifically,
+# a move has a 1/3 chance of being counterclockwise; if it is not counterclockwise, then it has a 1/2 chance of
+# being 180 degrees.
 def gen_scramble(n):
     moves=['R','L','U','D','F','B']
     scramble=[]
@@ -22,6 +34,7 @@ def gen_scramble(n):
             scramble[i]=scramble[i]+'2'
     return scramble
 
+# apply a scramble (in the form of an array of strings) to the given cube.
 def scrambler(cube,s):
     for move in s:
         if move=='R':
@@ -67,10 +80,11 @@ def scrambler(cube,s):
             for i in range(2):
                 B(cube,True)
 
-
+# testing
 cube = cube()
 s = gen_scramble(int(argv[1]))
 scrambler(cube,s)
 print()
+print("Scramble:",*s)
+print()
 print(cube)
-print(*s)

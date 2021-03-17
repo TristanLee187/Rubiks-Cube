@@ -1,4 +1,15 @@
+# class of cubie objects, each representing a single piece of the cube.
+
 class cubie:
+    # treat each cubie as a small cube with 6 faces; faces if the cubie that one wouldn't normally see
+    # are given the color Black or 'BL'. The other colors are:
+    # 'W': White
+    # 'Y': Yellow
+    # 'R': Red
+    # 'O': Orange
+    # 'B': Blue
+    # 'G': Green
+
     def __init__(self,colors):
         self.right=colors[0]
         self.left = colors[1]
@@ -7,6 +18,8 @@ class cubie:
         self.front = colors[4]
         self.back = colors[5]
 
+    # general rotate method, which calls on axis specific methods and passing along a boolean "clock";
+    # this represents a clockwise turn if True and counterclockwise if False
     def rotate(self,axis,clock):
         if axis=='x':
             self.rotate_x(clock)
