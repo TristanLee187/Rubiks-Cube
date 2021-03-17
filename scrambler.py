@@ -71,5 +71,6 @@ def scrambler(cube,s):
 cube = cube()
 s = gen_scramble(int(argv[1]))
 scrambler(cube,s)
+print()
 print(cube)
 print(*s)
