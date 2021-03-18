@@ -1,7 +1,6 @@
 # layer by layer cube object
 
 from cubie import *
-from moves import *
 
 class cube:
     def __init__(self):

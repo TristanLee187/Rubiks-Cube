@@ -1,7 +1,7 @@
+# file for storing the various scrambling functions
+
 from moves import *
-from cube import *
 from random import choice, random
-from sys import argv
 
 # generate a random scramble of length n, with the following specifications:
 # 1) No two consecutive moves will rotate the same face, i.e., the segment "R R" and "U U2" could not
@@ -33,6 +33,46 @@ def gen_scramble(n):
         elif r<2/3:
             scramble[i]=scramble[i]+'2'
     return scramble
+
+# read the scramble from a given file.
+# the scramble should be on a single line, with each move separated by white space, like the following:
+# "R U L2 D'"
+def read_scramble(filename):
+    file = open(filename,'r')
+    scramble = file.readline().split()
+    return scramble
+
+# read a scrambled cube given the flat layout of the colors on each face from a text file,
+# then apply it to the given cube
+def see_scramble(cube, filename):
+    file = open(filename,'r')
+    # top face
+    for i in range(3):
+        row = file.readline().split()
+        for j in range(3):
+            cube.pieces[0][i][j].top=row[j]
+    file.readline()
+
+    # left, front, right, and back faces
+    for i in range(3):
+        row = file.readline().split()
+
+        for j in range(3):
+            # left face
+            cube.pieces[i][j][0].left = row[j]
+            # front face
+            cube.pieces[i][2][j].front = row[j+3]
+            # right face
+            cube.pieces[i][2-j][2].right = row[j+6]
+            # back face
+            cube.pieces[i][0][2-j].back = row[j+9]
+    file.readline()
+
+    # bottom face
+    for i in range(3):
+        row = file.readline().split()
+        for j in range(3):
+            cube.pieces[2][2-i][j].bottom = row[j]
 
 # apply a scramble (in the form of an array of strings) to the given cube.
 def scrambler(cube,s):
@@ -79,12 +119,3 @@ def scrambler(cube,s):
         elif move=='B2':
             for i in range(2):
                 B(cube,True)
-
-# testing
-cube = cube()
-s = gen_scramble(int(argv[1]))
-scrambler(cube,s)
-print()
-print("Scramble:",*s)
-print()
-print(cube)

@@ -1,5 +1,5 @@
 # file containing each of the moves
-# Each face specific method follows the following format:
+# Each face specific function follows the following format:
 # 1) create a temporary face to be changed, then reassigned to the cube object.
 #    temporary faces are created as if they we being viewed head on.
 # 2) rotate each cubie in the temp face along one of their own central axes
