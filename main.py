@@ -4,7 +4,8 @@
 #                reading colors of "stickers" in a flat layout from a text file.
 #    The resulting cube object is printed in a flat layout
 
-from sys import argv
+from sys import argv, path
+path.append('./Logic')
 from cube import *
 from scrambler import *
 from interact import *
