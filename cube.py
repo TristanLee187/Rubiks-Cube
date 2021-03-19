@@ -2,7 +2,7 @@
 
 from cubie import *
 
-class cube:
+class Cube:
     def __init__(self):
         # initiate the top, middle, and bottom layers
         self.pieces=[]

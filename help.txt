@@ -9,3 +9,6 @@ This virtual Rubik's Cube supports the following:
       make ARGS="see filename"
    After the scramble is processed, the resulting cube is printed in a flat layout
 
+2: Interaction:
+   start a terminal based interactive script:
+      make ARGS="interact"
