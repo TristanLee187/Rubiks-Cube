@@ -3,12 +3,12 @@
 #                reading a scramble from a text file in cube notation,
 #                reading colors of "stickers" in a flat layout from a text file.
 #    The resulting cube object is printed in a flat layout
+# 2) interaction, which supports a variety of functions
 
 from sys import argv, path
-path.append('./Logic')
 from cube import *
-from scrambler import *
 from interact import *
+from scrambler import *
 
 def run():
     cube = Cube()
