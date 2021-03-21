@@ -38,14 +38,23 @@ def gen_scramble(n):
 # the scramble should be on a single line, with each move separated by white space, like the following:
 # "R U L2 D'"
 def read_scramble(filename):
-    file = open(filename,'r')
+    try:
+        file = open(filename,'r')
+    except:
+        print('File not found')
+        return []
     scramble = file.readline().split()
     return scramble
 
 # read a scrambled cube given the flat layout of the colors on each face from a text file,
 # then apply it to the given cube
 def see_scramble(cube, filename):
-    file = open(filename,'r')
+    file=''
+    try:
+        file = open(filename,'r')
+    except:
+        print('File not found')
+        return
     # top face
     for i in range(3):
         row = file.readline().split()
@@ -119,3 +128,6 @@ def scrambler(cube,s):
         elif move=='B2':
             for i in range(2):
                 B(cube,True)
+        else:
+            print('Invalid move found:', move)
+            return

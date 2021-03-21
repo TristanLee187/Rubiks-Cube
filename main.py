@@ -24,6 +24,9 @@ def run():
             s = gen_scramble(int(argv[2]))
         elif mode=='read':
             s = read_scramble(argv[2])
+        else:
+            print('Invalid command')
+            return
         scrambler(cube,s)
     print()
     print("Scramble:",*s)
