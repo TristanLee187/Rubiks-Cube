@@ -1,10 +1,4 @@
 # file for storing the various scrambling functions
-# supported moves include:
-# 1) the 6 basic outer face turns,
-# 2) each of their corresponding wide moves,
-# 3) the 3 slice moves, and
-# 4) the 3 cube rotations.
-# each supports counterclockwise turns (denoted with "'") and 180 degree turns (denoted 2)
 
 from moves import *
 from random import choice, random
