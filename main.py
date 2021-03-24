@@ -5,8 +5,7 @@
 #    The resulting cube object is printed in a flat layout
 # 2) interaction, which supports a variety of functions
 
-from sys import argv, path
-from cube import *
+from sys import argv
 from interact import *
 from scrambler import *
 

@@ -1,4 +1,10 @@
 # file for storing the various scrambling functions
+# supported moves include:
+# 1) the 6 basic outer face turns,
+# 2) each of their corresponding wide moves,
+# 3) the 3 slice moves, and
+# 4) the 3 cube rotations.
+# each supports counterclockwise turns (denoted with "'") and 180 degree turns (denoted 2)
 
 from moves import *
 from random import choice, random
@@ -85,49 +91,25 @@ def see_scramble(cube, filename):
 
 # apply a scramble (in the form of an array of strings) to the given cube.
 def scrambler(cube,s):
+    moves = {
+        'R': R, 'L': L, 'U': U, 'D': D, 'F': F, 'B': B,
+        'M': M, 'E': E, 'S': S,
+        'r': r, 'l': l, 'u': u, 'd': d, 'f': f, 'b': b,
+        'x': x, 'y': y, 'z': z
+    }
+
     for move in s:
-        if move=='R':
-            R(cube,True)
-        elif move=='R\'':
-            R(cube,False)
-        elif move=='R2':
-            for i in range(2):
-                R(cube,True)
-        elif move=='L':
-            L(cube,True)
-        elif move=='L\'':
-            L(cube,False)
-        elif move=='L2':
-            for i in range(2):
-                L(cube,True)
-        elif move == 'U':
-            U(cube, True)
-        elif move == 'U\'':
-            U(cube, False)
-        elif move == 'U2':
-            for i in range(2):
-                U(cube, True)
-        elif move=='D':
-            D(cube,True)
-        elif move=='D\'':
-            D(cube,False)
-        elif move=='D2':
-            for i in range(2):
-                D(cube,True)
-        elif move=='F':
-            F(cube,True)
-        elif move=='F\'':
-            F(cube,False)
-        elif move=='F2':
-            for i in range(2):
-                F(cube,True)
-        elif move=='B':
-            B(cube,True)
-        elif move=='B\'':
-            B(cube,False)
-        elif move=='B2':
-            for i in range(2):
-                B(cube,True)
+        if move[0] in moves:
+            if len(move)==1:
+                moves[move[0]](cube, True)
+            elif move[1]=='\'':
+                moves[move[0]](cube, False)
+            elif move[1]=='2':
+                moves[move[0]](cube, True)
+                moves[move[0]](cube, True)
+            else:
+                print('Invalid move found:', move)
+                return
         else:
             print('Invalid move found:', move)
             return
