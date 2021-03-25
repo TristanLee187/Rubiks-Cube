@@ -12,12 +12,12 @@ def interact():
                  '\tthe cube accordingly; you can put multiple moves on the same line, separated by spaces',
                  '\'random n\' applies a random scramble of length n to the cube',
                  '\'read filename\' reads a scramble in cube notation from filename (a text file),',
-                 '\tand applies the scramble to the cube',
+                 '\tand applies the scramble to the cube (see scramble.txt for an example)',
                  '\'see filename\' gets the colors of the stickers of each face of the cube in a flat format',
-                 '\tfrom filename (a text file), and assigns those colors to the cube',
-                 '\'reset\' replaces the cube with new (solved) cube object',
+                 '\tfrom filename (a text file), and assigns those colors to the cube (see layout.txt for an example)',
+                 '\'reset\' replaces the cube with a new (solved) cube object',
                  '\'print\' prints the cube in a flat layout',
-                 '\'quit\' stops the interaction']
+                 '\'quit\' stops the interactive script']
 
     while True:
         command = input('>>>').split()

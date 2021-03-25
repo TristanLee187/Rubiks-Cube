@@ -10,7 +10,7 @@ from random import choice, random
 # about that axis is at most 2. For example, R and L moves (as well as their prime and 180 degree
 # turn versions) both rotate about the x-axis. Therefore, the segment "R L" and "R2 L'" could appear,
 # but "R L R" and "L' R2 L" could not.
-# 3) For any point in the scramble, of the moves allowed by teh above two rules, each will be chosen with
+# 3) For any point in the scramble, of the moves allowed by the above two rules, each will be chosen with
 # equal probability. For example, if the allowed moves are [R, L, U, D], each has a 1/4 chance of being chosen.
 # 4) Each move has a 1/3 chance of being counterclockwise and 1/3 chance of being a 180 degree turn. Specifically,
 # a move has a 1/3 chance of being counterclockwise; if it is not counterclockwise, then it has a 1/2 chance of
@@ -49,7 +49,6 @@ def read_scramble(filename):
 # read a scrambled cube given the flat layout of the colors on each face from a text file,
 # then apply it to the given cube
 def see_scramble(cube, filename):
-    file=''
     try:
         file = open(filename,'r')
     except:

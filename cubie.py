@@ -1,7 +1,7 @@
 # class of cubie objects, each representing a single piece of the cube.
 
 class cubie:
-    # treat each cubie as a small cube with 6 faces; faces if the cubie that one wouldn't normally see
+    # treat each cubie as a small cube with 6 faces; faces of the cubie that one wouldn't normally see
     # are given the color Black or 'BL'. The other colors are:
     # 'W': White
     # 'Y': Yellow
