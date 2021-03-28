@@ -84,22 +84,17 @@ def see_scramble(cube, filename):
 
 # apply a scramble (in the form of an array of strings) to the given cube.
 def scrambler(cube,s):
-    moves = {
-        'R': R, 'L': L, 'U': U, 'D': D, 'F': F, 'B': B,
-        'M': M, 'E': E, 'S': S,
-        'r': r, 'l': l, 'u': u, 'd': d, 'f': f, 'b': b,
-        'x': x, 'y': y, 'z': z
-    }
+    moves = 'RLUDFBrludfbMESxyz'
 
     for move in s:
         if move[0] in moves:
             if len(move)==1:
-                moves[move[0]](cube, True)
-            elif move[1]=='\'':
-                moves[move[0]](cube, False)
-            elif move[1]=='2':
-                moves[move[0]](cube, True)
-                moves[move[0]](cube, True)
+                eval(move+'(cube, True)')
+            elif len(move)==2 and move[-1]=='\'':
+                eval(move[0]+'(cube, False)')
+            elif move[-1]=='2':
+                eval(move[0] + '(cube, True)')
+                eval(move[0] + '(cube, True)')
             else:
                 print('Invalid move found:', move)
                 return

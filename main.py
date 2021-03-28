@@ -6,30 +6,30 @@
 # 2) interaction, which supports a variety of functions
 
 from sys import argv
-from interact import *
-from scrambler import *
+from Logic import logic
 
 def run():
-    cube = Cube()
+    cube = logic.Cube()
     mode = argv[1]
     s=['?']
     if mode=='interact':
-        interact()
+        logic.interact()
         return
     if mode=='see':
-        see_scramble(cube,argv[2])
+        logic.see_scramble(cube,argv[2])
     else:
         if mode=='random':
-            s = gen_scramble(int(argv[2]))
+            s = logic.gen_scramble(int(argv[2]))
         elif mode=='read':
-            s = read_scramble(argv[2])
+            s = logic.read_scramble(argv[2])
         else:
             print('Invalid command')
             return
-        scrambler(cube,s)
+        logic.scrambler(cube,s)
     print()
     print("Scramble:",*s)
     print()
     print(cube)
+
 
 run()
