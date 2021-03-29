@@ -7,7 +7,6 @@
 
 from sys import argv
 from Logic import logic
-
 def run():
     cube = logic.Cube()
     mode = argv[1]
@@ -16,7 +15,7 @@ def run():
         logic.interact()
         return
     if mode=='see':
-        logic.see_scramble(cube,argv[2])
+        logic.see_scramble(cube, argv[2])
     else:
         if mode=='random':
             s = logic.gen_scramble(int(argv[2]))
@@ -25,7 +24,7 @@ def run():
         else:
             print('Invalid command')
             return
-        logic.scrambler(cube,s)
+        logic.scrambler(cube, s)
     print()
     print("Scramble:",*s)
     print()
