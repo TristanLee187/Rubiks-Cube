@@ -17,41 +17,44 @@
 
 
 # returns a clockwise rotation of a face if "clock" is True, a counterclockwise rotation otherwise.
-def rotate(face,clock):
+def rotate(face, clock):
     if clock:
         return [[face[i][j] for i in range(2, -1, -1)] for j in range(3)]
-    return [[face[i][j] for i in range(3)] for j in range(2,-1,-1)]
+    return [[face[i][j] for i in range(3)] for j in range(2, -1, -1)]
+
 
 # regular outer face turns
 
-def R(cube,clock):
+def R(cube, clock):
     # create the temp face
-    tempface = [[cube.pieces[i][j][2] for j in range(2,-1,-1)] for i in range(3)]
+    tempface = [[cube.pieces[i][j][2] for j in range(2, -1, -1)] for i in range(3)]
 
     # rotate each cubie
     for i in range(3):
         for j in range(3):
-            tempface[i][j].rotate('x',clock)
+            tempface[i][j].rotate('x', clock)
 
     # rotate the whole face
-    newface=rotate(tempface,clock)
+    newface = rotate(tempface, clock)
 
     # reassign
     for i in range(3):
         for j in range(3):
-            cube.pieces[i][2-j][2] = newface[i][j]
+            cube.pieces[i][2 - j][2] = newface[i][j]
 
-def L(cube,clock):
+
+def L(cube, clock):
     tempface = [[cube.pieces[i][j][0] for j in range(3)] for i in range(3)]
     for i in range(3):
         for j in range(3):
             tempface[i][j].rotate('x', not clock)
-    newface=rotate(tempface,clock)
+    newface = rotate(tempface, clock)
     for i in range(3):
         for j in range(3):
             cube.pieces[i][j][0] = newface[i][j]
 
-def U(cube,clock):
+
+def U(cube, clock):
     tempface = [[cube.pieces[0][i][j] for j in range(3)] for i in range(3)]
     for i in range(3):
         for j in range(3):
@@ -61,17 +64,19 @@ def U(cube,clock):
         for j in range(3):
             cube.pieces[0][i][j] = newface[i][j]
 
-def D(cube,clock):
-    tempface = [[cube.pieces[2][i][j] for j in range(3)] for i in range(2,-1,-1)]
+
+def D(cube, clock):
+    tempface = [[cube.pieces[2][i][j] for j in range(3)] for i in range(2, -1, -1)]
     for i in range(3):
         for j in range(3):
             tempface[i][j].rotate('y', not clock)
     newface = rotate(tempface, clock)
     for i in range(3):
         for j in range(3):
-            cube.pieces[2][2-i][j] = newface[i][j]
+            cube.pieces[2][2 - i][j] = newface[i][j]
 
-def F(cube,clock):
+
+def F(cube, clock):
     tempface = [[cube.pieces[i][2][j] for j in range(3)] for i in range(3)]
     for i in range(3):
         for j in range(3):
@@ -81,27 +86,30 @@ def F(cube,clock):
         for j in range(3):
             cube.pieces[i][2][j] = newface[i][j]
 
-def B(cube,clock):
-    tempface = [[cube.pieces[i][0][j] for j in range(2,-1,-1)] for i in range(3)]
+
+def B(cube, clock):
+    tempface = [[cube.pieces[i][0][j] for j in range(2, -1, -1)] for i in range(3)]
     for i in range(3):
         for j in range(3):
             tempface[i][j].rotate('z', not clock)
     newface = rotate(tempface, clock)
     for i in range(3):
         for j in range(3):
-            cube.pieces[i][0][2-j] = newface[i][j]
+            cube.pieces[i][0][2 - j] = newface[i][j]
+
 
 # slices
 
 def M(cube, clock):
-    tempface = [[cube.pieces[i][j][1] for j in range(2,-1,-1)] for i in range(3)]
+    tempface = [[cube.pieces[i][j][1] for j in range(2, -1, -1)] for i in range(3)]
     for i in range(3):
         for j in range(3):
             tempface[i][j].rotate('x', not clock)
     newface = rotate(tempface, not clock)
     for i in range(3):
         for j in range(3):
-            cube.pieces[i][2-j][1] = newface[i][j]
+            cube.pieces[i][2 - j][1] = newface[i][j]
+
 
 def E(cube, clock):
     tempface = [[cube.pieces[1][i][j] for j in range(3)] for i in range(3)]
@@ -113,6 +121,7 @@ def E(cube, clock):
         for j in range(3):
             cube.pieces[1][i][j] = newface[i][j]
 
+
 def S(cube, clock):
     tempface = [[cube.pieces[i][1][j] for j in range(3)] for i in range(3)]
     for i in range(3):
@@ -123,31 +132,38 @@ def S(cube, clock):
         for j in range(3):
             cube.pieces[i][1][j] = newface[i][j]
 
+
 # wide moves
 
 def r(cube, clock):
     R(cube, clock)
     M(cube, not clock)
 
+
 def l(cube, clock):
     L(cube, clock)
     M(cube, clock)
+
 
 def u(cube, clock):
     U(cube, clock)
     E(cube, not clock)
 
+
 def d(cube, clock):
     D(cube, clock)
     E(cube, clock)
+
 
 def f(cube, clock):
     F(cube, clock)
     S(cube, clock)
 
+
 def b(cube, clock):
     B(cube, clock)
     S(cube, not clock)
+
 
 # rotations
 
@@ -156,10 +172,12 @@ def x(cube, clock):
     L(cube, not clock)
     M(cube, not clock)
 
+
 def y(cube, clock):
     U(cube, clock)
     D(cube, not clock)
     E(cube, not clock)
+
 
 def z(cube, clock):
     F(cube, clock)

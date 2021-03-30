@@ -2,6 +2,7 @@
 
 from Logic import logic
 
+
 def interact():
     print('Hello There!')
     cube = logic.Cube()
@@ -23,26 +24,26 @@ def interact():
 
     while True:
         command = input('>>>').split()
-        if command[0]=='help':
+        if command[0] == 'help':
             for line in help_text:
                 print(line)
-        elif command[0]=='scramble':
+        elif command[0] == 'scramble':
             logic.scrambler(cube, command[1:])
-        elif command[0]=='random':
-            s=logic.gen_scramble(int(command[1]))
-            print('Scramble:',*s)
-            logic.scrambler(cube,s)
-        elif command[0]=='read':
-            s=logic.read_scramble(command[1])
-            logic.scrambler(cube,s)
-        elif command[0]=='see':
+        elif command[0] == 'random':
+            s = logic.gen_scramble(int(command[1]))
+            print('Scramble:', *s)
+            logic.scrambler(cube, s)
+        elif command[0] == 'read':
+            s = logic.read_scramble(command[1])
+            logic.scrambler(cube, s)
+        elif command[0] == 'see':
             logic.see_scramble(cube, command[1])
-        elif command[0]=='reset':
-            cube=logic.Cube()
-        elif command[0]=='print':
+        elif command[0] == 'reset':
+            cube = logic.Cube()
+        elif command[0] == 'print':
             print()
             print(cube)
-        elif command[0]=='quit':
+        elif command[0] == 'quit':
             print('Goodbye!')
             break
         else:
