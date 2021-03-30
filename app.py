@@ -1,3 +1,5 @@
+# PyGame Rubik's Cube application
+
 from Logic import logic
 from button import *
 
@@ -12,13 +14,14 @@ GREY = (200,200,200)
 WHITE = (255,255,255)
 YELLOW = (255,255,0)
 RED = (255,0,0)
-ORANGE = (255,165,0)
+ORANGE = (255,135,0)
 BLUE = (0,0,255)
 GREEN = (0,200,0)
 BLACK=(0,0,0)
 sw=35
 ew=3
 BUTTON_COLOR = GREY
+BUTTON_HOVER_COLOR = (0, 255, 255)
 FPS=60
 
 
@@ -50,7 +53,7 @@ def draw_cube(cube, x, y):
         pygame.draw.rect(WIN, BLACK, edge)
     pygame.display.update()
 
-
+# buttons
 right=button(BUTTON_COLOR,100,100,50,50,'R')
 left=button(BUTTON_COLOR,175,100,50,50,'L')
 up=button(BUTTON_COLOR,100,175,50,50,'U')
@@ -59,20 +62,22 @@ front=button(BUTTON_COLOR,100,250,50,50,'F')
 back=button(BUTTON_COLOR,175,250,50,50,'B')
 buttons= [right,left,up,down,front,back]
 
+
 def setup_buttons():
     for b in buttons:
         b.draw(WIN,BLACK)
     pygame.display.update()
 
+
 def handle_buttons(cube,mode,pos):
     if mode=='press':
         for b in buttons:
             if b.isOver(pos):
-                eval('logic.'+b.text+'(cube,True)')
+                eval('logic.'+b.text+'(cube,'+str(not (pygame.key.get_mods() & pygame.KMOD_SHIFT))+')')
     else:
         for b in buttons:
             if b.isOver(pos):
-                b.color = (0, 255, 255)
+                b.color = BUTTON_HOVER_COLOR
             else:
                 b.color = BUTTON_COLOR
 
@@ -80,13 +85,8 @@ def main():
     WIN.fill(GREY)
     cube = logic.Cube()
     clock = pygame.time.Clock()
-
-    # testing
-    # scramble = logic.gen_scramble(20)
-    # print("Scramble:",*scramble)
-    # logic.scrambler(cube, scramble)
-
     draw_cube(cube, 400, (HEIGHT-(10*ew+9*sw))/2)
+
     run = True
     while run:
         setup_buttons()
@@ -99,7 +99,7 @@ def main():
                 handle_buttons(cube,'move',pos)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 handle_buttons(cube,'press',pos)
-            draw_cube(cube, 400, (HEIGHT - (10 * ew + 9 * sw)) / 2)
+        draw_cube(cube, 400, (HEIGHT - (10 * ew + 9 * sw)) / 2)
 
 
 if __name__ == '__main__':

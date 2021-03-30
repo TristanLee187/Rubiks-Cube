@@ -1,5 +1,8 @@
-run:
-	@python3 main.py $(ARGS)
+interact:
+	@python3 interact.py
+
+app:
+	@python3 app.py
 
 help:
 	@cat help.txt
