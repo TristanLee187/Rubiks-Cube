@@ -5,4 +5,4 @@ app:
 	@python3 app.py
 
 help:
-	@cat help.txt
+	@cat make_help.txt
