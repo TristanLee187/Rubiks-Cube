@@ -150,14 +150,17 @@ buttons = [right, left, mid, up, down, equ, front, back, s, X, Y, Z, reset, scra
 def help_function():
     help_text = ['Hello There! Here`s how to use this virtual Rubik`s Cube:',
                  'Clicking one of the buttons with cube notation moves performs the corresponding move.',
-                 '    Holding Shift while pressing one of these buttons performs the counterclockwise counterpart.',
-                 '    Using right click has the same effect.',
-                 '    Doing both of these simultaneously does the clockwise move (same as a regular button press).',
+                 '  -Holding Shift while pressing one of these buttons performs the counterclockwise counterpart.',
+                 '  -Using right click has the same effect.',
+                 '  -Doing both of these simultaneously does the clockwise move (same as a regular button press).',
                  'Pressing `Reset` returns the cube to the solved state and standard orientation.',
                  'Pressing `Scramble` applies a random, 20 move scramble to the cube, and prints the scramble to',
-                 '    standard output.',
-                 'Pressing `Switch` switches your view of the cube; if you`re viewing it in a flat layout, the view',
-                 '    changes to 3D, and vice versa.']
+                 '   standard output.',
+                 'Pressing `Switch` switches the viewing layout of the cube; if you`re viewing it in a flat layout,',
+                 '   the view changes to 3D, and vice versa.',
+                 '  -for the flat layout, the top and bottom faces of the cube are in their respective places; the',
+                 '      faces in the middle, from left to right, are the cube`s left, front, right, and back faces.',
+                 '  -for the 3D layout, the left, top, and right faces are the cube`s front, top, and right faces']
     win2 = pygame.display.set_mode((WIDTH, HEIGHT))
     win2.fill(GREY)
     font = pygame.font.SysFont('Arial', 20)
