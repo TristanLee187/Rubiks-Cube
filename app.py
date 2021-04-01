@@ -3,7 +3,6 @@
 from Logic import logic
 from button import *
 
-pygame.init()
 
 pygame.display.set_caption('Rubik\'s Cube')
 
