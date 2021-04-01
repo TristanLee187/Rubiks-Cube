@@ -2,7 +2,7 @@
 
 from Logic import logic
 from button import *
-
+from math import sin, cos, radians
 
 pygame.display.set_caption('Rubik\'s Cube')
 
@@ -18,12 +18,73 @@ BLUE = (0, 0, 255)
 GREEN = (0, 200, 0)
 BLACK = (0, 0, 0)
 sw = 35
+sw3D = 70
 ew = 3
+ew3D = 4
 FPS = 60
+FLAT_CUBE_X, FLAT_CUBE_Y = 400, (HEIGHT - (10 * ew + 9 * sw)) / 2
+CUBE_3D_X, CUBE_3D_Y = 400, 150
+CUBE_SWITCH = True
+
+
+# draw the given cube to WIN in a 3D format, showing the front, top, and right faces
+def draw_3d_cube(cube, xx, yy):
+    x = xx
+    y = yy
+    angle = 60
+    si = sin(radians(angle))
+    co = cos(radians(angle))
+    colors = {'W': WHITE, 'Y': YELLOW, 'O': ORANGE, 'G': GREEN, 'R': RED, 'B': BLUE}
+    # front face
+    for i in range(3):
+        for j in range(3):
+            x_add = j * sw3D * si
+            y_add = i * sw3D + j * sw3D * co
+            color = colors[cube.pieces[i][2][j].front]
+            pygame.draw.polygon(WIN, color,
+                                [(x + x_add, y + y_add), (x + x_add, y + y_add + sw3D),
+                                 (x + sw3D * si+x_add, y + y_add + sw3D * co + sw3D),
+                                 (x + sw3D * si+x_add, y + y_add + sw3D * co)])
+            pygame.draw.polygon(WIN, BLACK,
+                                [(x+x_add, y + y_add), (x+x_add, y + y_add + sw3D),
+                                 (x + sw3D * si+x_add, y + y_add + sw3D * co + sw3D),
+                                 (x + sw3D * si+x_add, y + y_add + sw3D * co)], ew3D)
+    # top face
+    for i in range(3):
+        for j in range(3):
+            x_add = (j+i) * sw3D * si
+            y_sub = (j-i) * sw3D * co
+            color = colors[cube.pieces[0][2-j][i].top]
+            pygame.draw.polygon(WIN, color,
+                                [(x + x_add, y - y_sub), (x + x_add + sw3D*si, y-y_sub-sw3D*co),
+                                 (x+x_add+2*sw3D*si, y-y_sub),
+                                 (x + x_add + sw3D*si, y-y_sub+sw3D*co)])
+            pygame.draw.polygon(WIN, BLACK,
+                                [(x + x_add, y - y_sub),
+                                 (x + x_add + sw3D * si, y - y_sub - sw3D * co),
+                                 (x + x_add + 2 * sw3D * si, y - y_sub),
+                                 (x + x_add + sw3D * si, y - y_sub + sw3D * co)], ew3D)
+
+    # right face
+    x += 6*sw3D*si
+    for i in range(3):
+        for j in range(3):
+            x_sub = i * sw3D * si
+            y_add = j * sw3D + i * sw3D * co
+            color = colors[cube.pieces[j][i][2].right]
+            pygame.draw.polygon(WIN, color,
+                                [(x - x_sub, y + y_add), (x - x_sub, y + y_add + sw3D),
+                                 (x - sw3D * si-x_sub, y + y_add + sw3D * co + sw3D),
+                                 (x - sw3D * si-x_sub, y + y_add + sw3D * co)])
+            pygame.draw.polygon(WIN, BLACK,
+                                [(x-x_sub, y + y_add), (x-x_sub, y + y_add + sw3D),
+                                 (x - sw3D * si-x_sub, y + y_add + sw3D * co + sw3D),
+                                 (x - sw3D * si-x_sub, y + y_add + sw3D * co)], ew3D)
+    pygame.display.update()
 
 
 # draws the given cube to WIN in a flat layout
-def draw_cube(cube, x, y):
+def draw_2d_cube(cube, x, y):
     colors = {'W': WHITE, 'Y': YELLOW, 'O': ORANGE, 'G': GREEN, 'R': RED, 'B': BLUE}
     grid = [row.split() for row in str(cube).split('\n') if row != '']
     # stickers
@@ -51,9 +112,17 @@ def draw_cube(cube, x, y):
     pygame.display.update()
 
 
+# general draw cube function, that calls the 2D of 3D function if CUBE_SWITCH is True or False, respectively
+def draw_cube(cube):
+    if CUBE_SWITCH:
+        draw_2d_cube(cube, FLAT_CUBE_X, FLAT_CUBE_Y)
+    else:
+        draw_3d_cube(cube, CUBE_3D_X, CUBE_3D_Y)
+
+
 # buttons
-OFFSET_X = 50
-OFFSET_Y = 50
+OFFSET_X = 30
+OFFSET_Y = 30
 BUTTON_COLOR = GREY
 BUTTON_HOVER_COLOR = (0, 255, 255)
 BUTTON_SIZE = 50
@@ -74,7 +143,8 @@ Z = button(BUTTON_COLOR, OFFSET_X + 2 * SPACE, OFFSET_Y + 3 * SPACE, BUTTON_SIZE
 reset = button(BUTTON_COLOR, OFFSET_X, OFFSET_Y + 4 * SPACE, 2.5 * BUTTON_SIZE, BUTTON_SIZE, 'Reset')
 scramble = button(BUTTON_COLOR, OFFSET_X, OFFSET_Y + 5 * SPACE, 3.75 * BUTTON_SIZE, BUTTON_SIZE, 'Scramble')
 Help = button(BUTTON_COLOR, WIDTH - BUTTON_SIZE - OFFSET_X, OFFSET_Y + 5 * SPACE, BUTTON_SIZE, BUTTON_SIZE, '?')
-buttons = [right, left, mid, up, down, equ, front, back, s, X, Y, Z, reset, scramble, Help]
+switch = button(BUTTON_COLOR, WIDTH - 3 * BUTTON_SIZE - OFFSET_X, OFFSET_Y, 2.5 * BUTTON_SIZE, BUTTON_SIZE, 'Switch')
+buttons = [right, left, mid, up, down, equ, front, back, s, X, Y, Z, reset, scramble, Help, switch]
 
 
 def help_function():
@@ -85,7 +155,9 @@ def help_function():
                  '    Doing both of these simultaneously does the clockwise move (same as a regular button press).',
                  'Pressing `Reset` returns the cube to the solved state and standard orientation.',
                  'Pressing `Scramble` applies a random, 20 move scramble to the cube, and prints the scramble to',
-                 '    standard output.']
+                 '    standard output.',
+                 'Pressing `Switch` switches your view of the cube; if you`re viewing it in a flat layout, the view',
+                 '    changes to 3D, and vice versa.']
     win2 = pygame.display.set_mode((WIDTH, HEIGHT))
     win2.fill(GREY)
     font = pygame.font.SysFont('Arial', 20)
@@ -123,6 +195,10 @@ def handle_buttons(cube, mode, pos):
                 elif b.text == '?':
                     help_function()
                     setup_win(cube)
+                elif b.text == 'Switch':
+                    global CUBE_SWITCH
+                    CUBE_SWITCH = not CUBE_SWITCH
+                    setup_win(cube)
                 else:
                     eval('logic.' + b.text + '(cube,' + str(not (pygame.key.get_mods() & pygame.KMOD_SHIFT ^
                                                                  pygame.mouse.get_pressed(3)[2])) + ')')
@@ -137,7 +213,7 @@ def handle_buttons(cube, mode, pos):
 def setup_win(cube):
     WIN.fill(GREY)
     setup_buttons()
-    draw_cube(cube, 400, (HEIGHT - (10 * ew + 9 * sw)) / 2)
+    draw_cube(cube)
 
 
 def main():
@@ -157,7 +233,7 @@ def main():
                 handle_buttons(cube, 'move', pos)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 handle_buttons(cube, 'press', pos)
-                draw_cube(cube, 400, (HEIGHT - (10 * ew + 9 * sw)) / 2)
+                draw_cube(cube)
 
 
 if __name__ == '__main__':

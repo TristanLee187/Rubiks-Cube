@@ -17,7 +17,7 @@ class button:
             pygame.draw.rect(win, outline, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
 
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height), 0)
-        primeless_buttons = ['Reset', 'Scramble', '?']
+        primeless_buttons = ['Reset', 'Scramble', '?', 'Switch']
 
         if self.text != '':
             font = pygame.font.SysFont('Arial Black', 30)
