@@ -15,17 +15,20 @@ GREEN = (0, 200 / 255, 0)
 BLACK = (0, 0, 0)
 CUBE = logic.Cube()
 
-edges = ((0, 1), (0, 3), (0, 4),
-         (2, 1), (2, 3), (2, 7),
-         (6, 3), (6, 4), (6, 7),
-         (5, 1), (5, 4), (5, 7))
+edges = (
+    (0, 1), (0, 3), (0, 4),
+    (2, 1), (2, 3), (2, 7),
+    (6, 3), (6, 4), (6, 7),
+    (5, 1), (5, 4), (5, 7)
+)
 surfaces = (
-            (0, 1, 2, 3),  # back
-            (3, 2, 7, 6),  # left
-            (4, 5, 1, 0),  # right
-            (1, 5, 7, 2),  # top
-            (4, 0, 3, 6),  # bottom
-            (6, 7, 5, 4))  # front
+    (3, 2, 1, 0),  # back
+    (6, 7, 2, 3),  # left
+    (0, 1, 5, 4),  # right
+    (2, 7, 5, 1),  # top
+    (6, 3, 0, 4),  # bottom
+    (4, 5, 7, 6)  # front
+)
 
 
 def strColorToTuple(color):
@@ -54,17 +57,30 @@ def cuboid(x, y, z):
     ]
     for i in range(len(vertices)):
         vertices[i] = [vertices[i][j] + [x, y, z][j] for j in range(3)]
-    xc,yc,zc = -y//2+1,z//2+1,x//2+1
-    cubie = CUBE.pieces[xc][yc][zc]
-    colors = [cubie.back, cubie.left, cubie.right, cubie.top, cubie.bottom, cubie.front]
-    glBegin(GL_QUADS)
-    for i in range(6):
-        surface = surfaces[i]
-        if colors[i]!='BL':
-            glColor3fv(strColorToTuple(colors[i]))
-            for vertex in surface:
+
+    # wireframe, for debugging
+    def wireframe():
+        glBegin(GL_LINES)
+        for edge in edges:
+            for vertex in edge:
                 glVertex3fv(vertices[vertex])
-    glEnd()
+        glEnd()
+
+    # faces
+    def faces():
+        xc, yc, zc = -y // 2 + 1, z // 2 + 1, x // 2 + 1
+        cubie = CUBE.pieces[xc][yc][zc]
+        colors = [cubie.back, cubie.left, cubie.right, cubie.top, cubie.bottom, cubie.front]
+        glBegin(GL_QUADS)
+        for j in range(6):
+            surface = surfaces[j]
+            if colors[j] != 'BL':
+                glColor3fv(strColorToTuple(colors[j]))
+                for vertex in surface:
+                    glVertex3fv(vertices[vertex])
+        glEnd()
+
+    faces()
 
 
 def cube():
@@ -73,128 +89,141 @@ def cube():
             for k in range(-2, 4, 2):
                 cuboid(i, j, k)
 
-
 # Animation of cube moves
-def right():
+
+
+def right(angles):
     clock = 1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else -1
-    for angle in range(90):
+    for angle in range(angles):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for i in range(-2, 2, 2):
             for j in range(-2, 4, 2):
                 for k in range(-2, 4, 2):
                     cuboid(i, j, k)
-        glRotatef(clock * angle, 1, 0, 0)
+        glRotatef(clock * angle * 90 / angles, 1, 0, 0)
         for j in range(-2, 4, 2):
             for k in range(-2, 4, 2):
                 cuboid(2, j, k)
-        glRotatef(-clock * angle, 1, 0, 0)
+        glRotatef(-clock * angle * 90 / angles, 1, 0, 0)
         pygame.display.flip()
-    logic.R(CUBE, clock==-1)
+    logic.R(CUBE, clock == -1)
 
 
-def left():
+def left(angles):
     clock = -1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else 1
-    for angle in range(90):
+    for angle in range(angles):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for i in range(0, 4, 2):
             for j in range(-2, 4, 2):
                 for k in range(-2, 4, 2):
                     cuboid(i, j, k)
-        glRotatef(clock * angle, 1, 0, 0)
+        glRotatef(clock * angle * 90 / angles, 1, 0, 0)
         for j in range(-2, 4, 2):
             for k in range(-2, 4, 2):
                 cuboid(-2, j, k)
-        glRotatef(-clock * angle, 1, 0, 0)
+        glRotatef(-clock * angle * 90 / angles, 1, 0, 0)
         pygame.display.flip()
-    logic.L(CUBE, clock==1)
+    logic.L(CUBE, clock == 1)
 
 
-def up():
+def up(angles):
     clock = 1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else -1
-    for angle in range(90):
+    for angle in range(angles):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for i in range(-2, 4, 2):
             for j in range(-2, 2, 2):
                 for k in range(-2, 4, 2):
                     cuboid(i, j, k)
-        glRotatef(clock * angle, 0, 1, 0)
+        glRotatef(clock * angle * 90 / angles, 0, 1, 0)
         for i in range(-2, 4, 2):
             for k in range(-2, 4, 2):
                 cuboid(i, 2, k)
-        glRotatef(-clock * angle, 0, 1, 0)
+        glRotatef(-clock * angle * 90 / angles, 0, 1, 0)
         pygame.display.flip()
-    logic.U(CUBE, clock==-1)
+    logic.U(CUBE, clock == -1)
 
 
-def down():
+def down(angles):
     clock = -1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else 1
-    for angle in range(90):
+    for angle in range(angles):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for i in range(-2, 4, 2):
             for j in range(0, 4, 2):
                 for k in range(-2, 4, 2):
                     cuboid(i, j, k)
-        glRotatef(clock * angle, 0, 1, 0)
+        glRotatef(clock * angle * 90 / angles, 0, 1, 0)
         for i in range(-2, 4, 2):
             for k in range(-2, 4, 2):
                 cuboid(i, -2, k)
-        glRotatef(-clock * angle, 0, 1, 0)
+        glRotatef(-clock * angle * 90 / angles, 0, 1, 0)
         pygame.display.flip()
-    logic.D(CUBE, clock==1)
+    logic.D(CUBE, clock == 1)
 
 
-def front():
+def front(angles):
     clock = 1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else -1
-    for angle in range(90):
+    for angle in range(angles):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for i in range(-2, 4, 2):
             for j in range(-2, 4, 2):
                 for k in range(-2, 2, 2):
                     cuboid(i, j, k)
-        glRotatef(clock * angle, 0, 0, 1)
+        glRotatef(clock * angle * 90 / angles, 0, 0, 1)
         for i in range(-2, 4, 2):
             for j in range(-2, 4, 2):
                 cuboid(i, j, 2)
-        glRotatef(-clock * angle, 0, 0, 1)
+        glRotatef(-clock * angle * 90 / angles, 0, 0, 1)
         pygame.display.flip()
-    logic.F(CUBE, clock==-1)
+    logic.F(CUBE, clock == -1)
 
 
-def back():
+def back(angles):
     clock = -1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else 1
-    for angle in range(90):
+    for angle in range(angles):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         for i in range(-2, 4, 2):
             for j in range(-2, 4, 2):
                 for k in range(0, 4, 2):
                     cuboid(i, j, k)
-        glRotatef(clock * angle, 0, 0, 1)
+        glRotatef(clock * angle * 90 / angles, 0, 0, 1)
         for i in range(-2, 4, 2):
             for j in range(-2, 4, 2):
                 cuboid(i, j, -2)
-        glRotatef(-clock * angle, 0, 0, 1)
+        glRotatef(-clock * angle * 90 / angles, 0, 0, 1)
         pygame.display.flip()
-    logic.B(CUBE, clock==1)
+    logic.B(CUBE, clock == 1)
 
 
-def moves():
+def moves(angles):
     keys = pygame.key.get_pressed()
     if keys[pygame.K_r]:
-        right()
+        right(angles)
     elif keys[pygame.K_l]:
-        left()
+        left(angles)
     elif keys[pygame.K_u]:
-        up()
+        up(angles)
     elif keys[pygame.K_d]:
-        down()
+        down(angles)
     elif keys[pygame.K_f]:
-        front()
+        front(angles)
     elif keys[pygame.K_b]:
-        back()
+        back(angles)
     pass
 
 
 # end of animation of cube moves
+
+
+def rotate():
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        glRotatef(2, -1, 0, 0)
+    elif keys[pygame.K_DOWN]:
+        glRotatef(2, 1, 0, 0)
+    elif keys[pygame.K_LEFT]:
+        glRotatef(2, 0, 1, 0)
+    elif keys[pygame.K_RIGHT]:
+        glRotatef(2, 0, -1, 0)
 
 
 def main():
@@ -203,11 +232,10 @@ def main():
     WIN = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
 
     gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
-
-    glTranslatef(0, 0, -20)
+    glTranslatef(0, 0, -15)
+    glEnable(GL_CULL_FACE)
 
     while True:
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -215,8 +243,10 @@ def main():
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         cube()
-        moves()
+        rotate()
+        moves(30)
         pygame.display.flip()
+        pygame.time.wait(10)
 
 
 main()
