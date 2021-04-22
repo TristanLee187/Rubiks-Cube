@@ -1,9 +1,13 @@
 import pygame
 from Logic import logic
 from pygame.locals import *
-
 from OpenGL.GL import *
 from OpenGL.GLU import *
+
+pygame.init()
+
+DISPLAY = (800, 600)
+WIN = pygame.display.set_mode(DISPLAY, DOUBLEBUF | OPENGL)
 
 GREY = (200 / 255, 200 / 255, 200 / 255)
 WHITE = (1, 1, 1)
@@ -227,11 +231,7 @@ def rotate():
 
 
 def main():
-    pygame.init()
-    display = (800, 600)
-    WIN = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
-
-    gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
+    gluPerspective(45, (DISPLAY[0] / DISPLAY[1]), 0.1, 50.0)
     glTranslatef(0, 0, -15)
     glEnable(GL_CULL_FACE)
 
@@ -244,7 +244,7 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         cube()
         rotate()
-        moves(30)
+        moves(60)
         pygame.display.flip()
         pygame.time.wait(10)
 
