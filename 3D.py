@@ -3,6 +3,7 @@ from Logic import logic
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from math import sin, cos, ceil, radians
 
 pygame.init()
 
@@ -17,6 +18,10 @@ ORANGE = (1, 135 / 255, 0)
 BLUE = (0, 0, 1)
 GREEN = (0, 200 / 255, 0)
 BLACK = (0, 0, 0)
+X_ROTATE = 0
+Y_ROTATE = 0
+Z_ROTATE = 0
+
 CUBE = logic.Cube()
 
 edges = (
@@ -31,7 +36,7 @@ surfaces = (
     (0, 1, 5, 4),  # right
     (2, 7, 5, 1),  # top
     (6, 3, 0, 4),  # bottom
-    (4, 5, 7, 6)  # front
+    (4, 5, 7, 6)   # front
 )
 
 
@@ -50,6 +55,116 @@ def strColorToTuple(color):
         return GREEN
     if color == 'Y':
         return YELLOW
+
+
+def round_square3(points, face, color, l, radius, res, shift):
+    cx, cy, cz = [sum([points[i][j] for i in range(4)])/4 for j in range(3)]
+    if face==0:
+        cz-=shift
+    if face==1:
+        cx-=shift
+    if face==2:
+        cx+=shift
+    if face==3:
+        cy+=shift
+    if face==4:
+        cy-=shift
+    if face==5:
+        cz+=shift
+    cd = l/2-radius
+    tl = (-cd, cd)
+    tr = (cd, cd)
+    bl = (-cd, -cd)
+    br = (cd, -cd)
+    glColor3fv(color)
+    corners=[]
+    corners2=[]
+    if face==0 or face==5:
+        add=[tr, br, bl, tl]
+        angle = 90
+        for quarter in range(4):
+            glBegin(GL_TRIANGLE_FAN)
+            nx, ny = cx+add[quarter][0], cy+add[quarter][1]
+            glVertex3fv((nx, ny, cz))
+            for i in range(ceil(res/4)+1):
+                glVertex3fv(
+                    ((nx + (radius * cos(radians(angle)))), (ny + (radius * sin(radians(angle)))), cz)
+                )
+                angle-=360/res
+            angle+=360/res
+            glEnd()
+        corners = [
+            (cx-cd, cy+l/2, cz),
+            (cx+cd, cy+l/2, cz),
+            (cx+cd, cy-l / 2, cz),
+            (cx-cd, cy-l/2, cz),
+        ]
+        corners2 = [
+            (cx-l/2, cy+cd, cz),
+            (cx+l / 2, cy+cd, cz),
+            (cx+l/2, cy-cd, cz),
+            (cx-l/2, cy-cd, cz)
+        ]
+    elif face==1 or face==2:
+        add=[tr, br, bl, tl]
+        angle = 0
+        for quarter in range(4):
+            glBegin(GL_TRIANGLE_FAN)
+            ny, nz = cy+add[quarter][0], cz+add[quarter][1]
+            glVertex3fv((cx, ny, nz))
+            for i in range(ceil(res/4)+1):
+                glVertex3fv(
+                    (cx, (ny + (radius * sin(radians(angle)))), (nz + (radius * cos(radians(angle)))))
+                )
+                angle+=360/res
+            angle-=360/res
+            glEnd()
+        corners = [
+            (cx, cy+cd, cz+l/2),
+            (cx, cy+cd, cz-l/2),
+            (cx, cy-cd, cz-l/2),
+            (cx, cy-cd, cz+l/2)
+        ]
+        corners2 = [
+            (cx, cy+l / 2, cz+cd),
+            (cx, cy+l / 2, cz-cd),
+            (cx, cy-l / 2, cz-cd),
+            (cx, cy-l / 2, cz+cd)
+        ]
+    elif face==3 or face==4:
+        add = [tr, br, bl, tl]
+        angle = 0
+        for quarter in range(4):
+            glBegin(GL_TRIANGLE_FAN)
+            nx, nz = cx + add[quarter][0], cz + add[quarter][1]
+            glVertex3fv((nx, cy, nz))
+            for i in range(ceil(res / 4) + 1):
+                glVertex3fv(
+                    ((nx + (radius * sin(radians(angle)))), cy, (nz + (radius * cos(radians(angle)))))
+                )
+                angle += 360 / res
+            angle -= 360 / res
+            glEnd()
+        corners = [
+            (cx+cd, cy, cz+l / 2),
+            (cx+cd, cy, cz-l / 2),
+            (cx-cd, cy, cz-l / 2),
+            (cx-cd, cy, cz+l / 2)
+        ]
+        corners2 = [
+            (cx+l/2, cy, cz-cd),
+            (cx-l/2, cy, cz-cd),
+            (cx-l/2, cy, cz+cd),
+            (cx+l/2, cy, cz+cd)
+        ]
+    glBegin(GL_QUADS)
+    for corner in corners:
+        glVertex3fv(corner)
+    glEnd()
+    glBegin(GL_QUADS)
+    for corner in corners2:
+        glVertex3fv(corner)
+    glEnd()
 
 
 def cuboid(x, y, z):
@@ -75,14 +190,16 @@ def cuboid(x, y, z):
         xc, yc, zc = -y // 2 + 1, z // 2 + 1, x // 2 + 1
         cubie = CUBE.pieces[xc][yc][zc]
         colors = [cubie.back, cubie.left, cubie.right, cubie.top, cubie.bottom, cubie.front]
-        glBegin(GL_QUADS)
         for j in range(6):
             surface = surfaces[j]
             if colors[j] != 'BL':
-                glColor3fv(strColorToTuple(colors[j]))
+                glColor3fv(strColorToTuple('BL'))
+                glBegin(GL_QUADS)
                 for vertex in surface:
                     glVertex3fv(vertices[vertex])
-        glEnd()
+                glEnd()
+                points = [vertices[vertex] for vertex in surface]
+                round_square3(points, j, strColorToTuple(colors[j]), 1.8, 0.3, 12, 0.03)
 
     faces()
 
@@ -219,21 +336,21 @@ def moves(angles):
 
 
 def rotate():
+    global X_ROTATE, Y_ROTATE
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_UP]:
-        glRotatef(2, -1, 0, 0)
-    elif keys[pygame.K_DOWN]:
+    if keys[pygame.K_x]:
         glRotatef(2, 1, 0, 0)
-    elif keys[pygame.K_LEFT]:
+    elif keys[pygame.K_y]:
         glRotatef(2, 0, 1, 0)
-    elif keys[pygame.K_RIGHT]:
-        glRotatef(2, 0, -1, 0)
+    elif keys[pygame.K_z]:
+        glRotatef(2, 0, 0, 1)
 
 
 def main():
+    glClearColor(200 / 255, 200 / 255, 200 / 255, 0)
     gluPerspective(45, (DISPLAY[0] / DISPLAY[1]), 0.1, 50.0)
     glTranslatef(0, 0, -15)
-    glEnable(GL_CULL_FACE)
+    glEnable(GL_DEPTH_TEST)
 
     while True:
         for event in pygame.event.get():
@@ -242,11 +359,10 @@ def main():
                 quit()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        cube()
         rotate()
-        moves(60)
+        cube()
+        moves(20)
         pygame.display.flip()
-        pygame.time.wait(10)
 
 
 main()
