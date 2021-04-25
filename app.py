@@ -1,9 +1,10 @@
 # PyGame Rubik's Cube application
 
 from Logic import logic
-from button import *
+import pygame
 from math import sin, cos, radians
 
+pygame.init()
 pygame.display.set_caption('Rubik\'s Cube')
 
 WIDTH = 900
@@ -25,6 +26,39 @@ FPS = 60
 FLAT_CUBE_X, FLAT_CUBE_Y = 400, (HEIGHT - (10 * ew + 9 * sw)) / 2
 CUBE_3D_X, CUBE_3D_Y = 400, 150
 CUBE_SWITCH = True
+
+
+class button:
+    def __init__(self, color, x, y, width, height, text=''):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+
+    def draw(self, win, outline=None):
+        # Call this method to draw the button on the screen
+        if outline:
+            pygame.draw.rect(win, outline, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
+
+        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height), 0)
+        primeless_buttons = ['Reset', 'Scramble', '?', 'Switch']
+
+        if self.text != '':
+            font = pygame.font.SysFont('Arial Black', 30)
+            text = font.render(self.text + int(pygame.key.get_mods() & pygame.KMOD_SHIFT and
+                                               self.text not in primeless_buttons) * '\'', True, (0, 0, 0))
+            win.blit(text, (
+                self.x + (self.width / 2 - text.get_width() / 2), self.y + (self.height / 2 - text.get_height() / 2)))
+
+    def isOver(self, pos):
+        # Pos is the mouse position or a tuple of (x,y) coordinates
+        if self.x + self.width > pos[0] > self.x:
+            if self.y + self.height > pos[1] > self.y:
+                return True
+
+        return False
 
 
 # draw the given cube to WIN in a 3D format, showing the front, top, and right faces
