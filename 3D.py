@@ -199,7 +199,7 @@ def cuboid(x, y, z):
                     glVertex3fv(vertices[vertex])
                 glEnd()
                 points = [vertices[vertex] for vertex in surface]
-                round_square3(points, j, strColorToTuple(colors[j]), 1.8, 0.3, 12, 0.03)
+                round_square3(points, j, strColorToTuple(colors[j]), 1.8, 0.4, 12, 0.03)
 
     faces()
 
@@ -209,6 +209,7 @@ def cube():
         for j in range(-2, 4, 2):
             for k in range(-2, 4, 2):
                 cuboid(i, j, k)
+
 
 # Animation of cube moves
 
@@ -329,7 +330,6 @@ def moves(angles):
         front(angles)
     elif keys[pygame.K_b]:
         back(angles)
-    pass
 
 
 # end of animation of cube moves
@@ -338,12 +338,13 @@ def moves(angles):
 def rotate():
     global X_ROTATE, Y_ROTATE
     keys = pygame.key.get_pressed()
+    clock = 1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else -1
     if keys[pygame.K_x]:
-        glRotatef(2, 1, 0, 0)
+        glRotatef(clock*2, 1, 0, 0)
     elif keys[pygame.K_y]:
-        glRotatef(2, 0, 1, 0)
+        glRotatef(clock*2, 0, 1, 0)
     elif keys[pygame.K_z]:
-        glRotatef(2, 0, 0, 1)
+        glRotatef(clock*2, 0, 0, 1)
 
 
 def main():
@@ -361,7 +362,7 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         rotate()
         cube()
-        moves(20)
+        moves(15)
         pygame.display.flip()
 
 
