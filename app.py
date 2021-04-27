@@ -182,7 +182,7 @@ buttons = [right, left, mid, up, down, equ, front, back, s, X, Y, Z, reset, scra
 
 
 def help_function():
-    help_text = ['Hello There! Here`s how to use this virtual Rubik`s Cube:',
+    help_text = ['Hello there! Here`s how to use this virtual Rubik`s Cube:',
                  'Clicking one of the buttons with cube notation moves performs the corresponding move.',
                  '  -Holding Shift while pressing one of these buttons performs the counterclockwise counterpart.',
                  '  -Using right click has the same effect.',
