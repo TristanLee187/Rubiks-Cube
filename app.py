@@ -191,10 +191,10 @@ def help_function():
                  'Pressing `Scramble` applies a random, 20 move scramble to the cube, and prints the scramble to',
                  '   standard output.',
                  'Pressing `Switch` switches the viewing layout of the cube; if you`re viewing it in a flat layout,',
-                 '   the view changes to 3D, and vice versa.',
+                 '   the view changes to an isometric projection, and vice versa.',
                  '  -For the flat layout, the top and bottom faces of the cube are in their respective places; the',
                  '      faces in the middle, from left to right, are the cube`s left, front, right, and back faces.',
-                 '  -For the 3D layout, the left, top, and right faces are the cube`s front, top, and right faces']
+                 '  -For the isometric, the left, top, and right faces are the cube`s front, top, and right faces']
     win2 = pygame.display.set_mode((WIDTH, HEIGHT))
     win2.fill(GREY)
     font = pygame.font.SysFont('Arial', 20)

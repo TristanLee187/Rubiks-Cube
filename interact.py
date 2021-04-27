@@ -8,19 +8,19 @@ def interact():
     cube = logic.Cube()
     print('Your cube is ready! Type \'help\' to bring up the help menu')
 
-    help_text = ['\'help\' brings up this menu',
-                 '\'scramble\' followed by moves in cube notation (R, L, R\', R2, etc.) will scramble',
+    help_text = ['`help` brings up this menu',
+                 '`scramble` followed by moves in cube notation (R, L, R\', R2, etc.) will scramble',
                  '\tthe cube accordingly; you can put multiple moves on the same line, separated by spaces',
                  '\tsupported moves include: the outer face turns (R, L, U, D, F, B), their corresponding',
                  '\twide moves (r, l, u, d, f, b), slice moves (M, E, S), and cube rotations (x, y, z)',
-                 '\'random n\' applies a random scramble of length n to the cube',
-                 '\'read filename\' reads a scramble in cube notation from filename (a text file),',
+                 '`random n` applies a random scramble of length n to the cube',
+                 '`read filename` reads a scramble in cube notation from filename (a text file),',
                  '\tand applies the scramble to the cube (see scramble.txt for an example)',
-                 '\'see filename\' gets the colors of the stickers of each face of the cube in a flat format',
+                 '`see filename` gets the colors of the stickers of each face of the cube in a flat format',
                  '\tfrom filename (a text file), and assigns those colors to the cube (see layout.txt for an example)',
-                 '\'reset\' replaces the cube with a new (solved) cube object',
-                 '\'print\' prints the cube in a flat layout',
-                 '\'quit\' stops the interactive script']
+                 '`reset` replaces the cube with a new (solved) cube object',
+                 '`print` prints the cube in a flat layout',
+                 '`quit` stops the interactive script']
 
     while True:
         command = input('>>>').split()
