@@ -52,7 +52,7 @@ class button:
             win.blit(text, (
                 self.x + (self.width / 2 - text.get_width() / 2), self.y + (self.height / 2 - text.get_height() / 2)))
 
-    def isOver(self, pos):
+    def is_over(self, pos):
         # Pos is the mouse position or a tuple of (x,y) coordinates
         if self.x + self.width > pos[0] > self.x:
             if self.y + self.height > pos[1] > self.y:
@@ -158,7 +158,7 @@ def draw_cube(cube):
 OFFSET_X = 30
 OFFSET_Y = 30
 BUTTON_COLOR = GREY
-BUTTON_HOVER_COLOR = (0, 255, 255)
+BUTTON_HOVER_COLOR = (150, 150, 150)
 BUTTON_SIZE = 50
 SPACE = 75
 
@@ -222,7 +222,7 @@ def setup_buttons():
 def handle_buttons(cube, mode, pos):
     if mode == 'press':
         for b in buttons:
-            if b.isOver(pos):
+            if b.is_over(pos):
                 if b.text == 'Reset':
                     cube.__init__()
                 elif b.text == 'Scramble':
@@ -241,7 +241,7 @@ def handle_buttons(cube, mode, pos):
                                                                  pygame.mouse.get_pressed(3)[2])) + ')')
     else:
         for b in buttons:
-            if b.isOver(pos):
+            if b.is_over(pos):
                 b.color = BUTTON_HOVER_COLOR
             else:
                 b.color = BUTTON_COLOR

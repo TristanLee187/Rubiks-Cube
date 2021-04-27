@@ -6,3 +6,6 @@ app:
 
 help:
 	@cat make_help.txt
+
+3D:
+	@python3 3D.py

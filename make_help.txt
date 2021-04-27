@@ -6,3 +6,6 @@ This virtual Rubik's Cube supports the following:
 
 2: Start a PyGame based application:
       'make app'
+
+3: Start an PyGame and PyOpenGL based application:
+      'make 3D'
