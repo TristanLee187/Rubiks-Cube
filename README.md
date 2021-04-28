@@ -34,11 +34,11 @@ For users without Make, each program can also be run with just `python3` from th
 #### Terminal based script
 This script uses a command-line style UI, with the following commands:
 
-* `help` brings up the help menu (the text below) to standard output
+* `help` prints the help menu (the text below) to standard output
 
 * `scramble` followed by moves in cube notation (R, L, R', R2, etc.) will scramble the cube accordingly; you can put multiple moves on the same line, separated by spaces. Supported moves include: the outer face turns (R, L, U, D, F, B), their corresponding wide moves (r, l, u, d, f, b), slice moves (M, E, S), and cube rotations (x, y, z)
 
-* `random n` applies a random scramble of length n to the cube
+* `random n` applies a random scramble of length n to the cube, and prints the scramble to standard output
 
 * `read filename` reads a scramble in cube notation from filename (a text file),
         and applies the scramble to the cube (see scramble.txt for an example)
@@ -55,7 +55,7 @@ This script uses a command-line style UI, with the following commands:
 #### 2D PyGame Program
 This program uses PyGame to run a button based GUI:
 
-* Clicking the '?' button brings up the help menu (the text below) in PyGame window that replaces the previous one; closing that help window brings back the old one
+* Clicking the '?' button brings up the help menu (the text below) in a PyGame window that replaces the previous one; closing the help window brings back the old one
   
 * Clicking one of the buttons with cube notation moves performs the corresponding move
 
@@ -65,9 +65,9 @@ This program uses PyGame to run a button based GUI:
     
     * Doing both of these simultaneously does the clockwise move (same as a regular button press)
     
-* Pressing 'Reset' returns the cube to the solved state and standard orientation
+* Clicking 'Reset' returns the cube to the solved state and standard orientation (white on top, green in front)
 
-* Pressing 'Scramble' applies a random, 20 move scramble to the cube, and prints the scramble to standard output
+* Clicking 'Scramble' applies a random, 20 move scramble to the cube, and prints the scramble to standard output
 
 * Pressing 'Switch' switches the viewing layout of the cube; if you`re viewing it in a flat layout, the view changes to an isometric projection, and vice versa
 
