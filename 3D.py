@@ -24,9 +24,16 @@ ANGLES = 15
 X_ROTATE = 0
 Y_ROTATE = 0
 Z_ROTATE = 0
-
+TRIGGER, X_TRIGGER, Y_TRIGGER, LAST_MOVE = False, False, False, True
 CUBE = logic.Cube()
 SCRAMBLE_LENGTH = 20
+
+ROT_MATRIX = [
+    [1,1,1,1],
+    [1,1,1,1],
+    [1,1,1,1],
+    [1,1,1,1]
+]
 
 edges = (
     (0, 1), (0, 3), (0, 4),
@@ -209,11 +216,12 @@ def cuboid(x, y, z):
 
 
 def cube():
+    # rotate_head()
     for i in range(-2, 4, 2):
         for j in range(-2, 4, 2):
             for k in range(-2, 4, 2):
                 cuboid(i, j, k)
-
+    # rotate_tail()
 
 # Animation of cube moves
 
@@ -318,6 +326,7 @@ def B(clock):
 
 
 def scrambler_3d(s):
+    # rotate_head()
     moves = 'RLUDFB'
     for move in s:
         if move[0] in moves:
@@ -334,6 +343,7 @@ def scrambler_3d(s):
         else:
             print('Invalid move found:', move)
             return
+    # rotate_tail()
 
 
 def handle_scramble_keys():
@@ -358,16 +368,40 @@ def handle_scramble_keys():
     scrambler_3d(scramble)
 
 
-def rotate():
-    global X_ROTATE, Y_ROTATE
+def rotate_head():
+    global X_ROTATE, Y_ROTATE, Z_ROTATE, TRIGGER, X_TRIGGER, Y_TRIGGER, LAST_MOVE
     keys = pygame.key.get_pressed()
     clock = 1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else -1
-    if keys[pygame.K_x]:
-        glRotatef(clock * 2, 1, 0, 0)
-    elif keys[pygame.K_y]:
-        glRotatef(clock * 2, 0, 1, 0)
-    elif keys[pygame.K_z]:
-        glRotatef(clock * 2, 0, 0, 1)
+    TRIGGER, X_TRIGGER, Y_TRIGGER = False, False, False
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    if keys[pygame.K_x] or keys[pygame.K_y]:
+        TRIGGER = True
+        glPushMatrix()
+        if keys[pygame.K_x]:
+            X_TRIGGER = True
+            LAST_MOVE = True
+            X_ROTATE += 2 * clock
+        elif keys[pygame.K_y]:
+            Y_TRIGGER = True
+            LAST_MOVE = False
+            Y_ROTATE += 2 * clock
+    if LAST_MOVE:
+        glRotatef(X_ROTATE, 1, 0, 0)
+        glRotatef(Y_ROTATE, 0, 1, 0)
+    else:
+        glRotatef(Y_ROTATE, 0, 1, 0)
+        glRotatef(X_ROTATE, 1, 0, 0)
+
+
+def rotate_tail():
+    if LAST_MOVE:
+        glRotatef(-Y_ROTATE, 0, 1, 0)
+        glRotatef(-X_ROTATE, 1, 0, 0)
+    else:
+        glRotatef(-X_ROTATE, 1, 0, 0)
+        glRotatef(-Y_ROTATE, 0, 1, 0)
+    if TRIGGER:
+        glPopMatrix()
 
 
 def main():
@@ -384,10 +418,11 @@ def main():
                 pygame.quit()
                 quit()
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        rotate()
+        # glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        # rotate_head()
         cube()
         handle_scramble_keys()
+        # rotate_tail()
         pygame.display.flip()
         clock.tick(FPS)
 
