@@ -69,7 +69,7 @@ This program uses PyGame to run a button based GUI:
 
 * Clicking 'Scramble' applies a random, 20 move scramble to the cube, and prints the scramble to standard output
 
-* Pressing 'Switch' switches the viewing layout of the cube; if you`re viewing it in a flat layout, the view changes to an isometric projection, and vice versa
+* Clicking 'Switch' switches the viewing layout of the cube; if you`re viewing it in a flat layout, the view changes to an isometric projection, and vice versa
 
     * For the flat layout, the top and bottom faces of the cube are in their respective places; the faces in the middle, from left to right, are the cube`s left, front, right, and back faces
     
@@ -83,3 +83,5 @@ This program uses PyOpenGL to render a cube object in 3D, and wraps that renderi
 * Pressing the `x` or `y` keys rotates the cube about the x or y axes
     
 * Holding `Shift` while pressing any of the above keys performs the counterclockwise counterpart
+
+* Clicking and dragging with the mouse also rotates the cube

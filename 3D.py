@@ -360,15 +360,28 @@ def handle_scramble_keys():
     scrambler_3d(scramble)
 
 
-def rotate():
+def rotate(axis, mul):
+    if axis:
+        glRotatef(mul, *X_AXIS[0][:-1])
+        matrix.matrix_mult(matrix.rotation_matrix(radians(mul), X_AXIS[0][:-1]), Y_AXIS)
+    else:
+        glRotatef(mul, *Y_AXIS[0][:-1])
+        matrix.matrix_mult(matrix.rotation_matrix(radians(mul), Y_AXIS[0][:-1]), X_AXIS)
+
+
+def rotate_keys():
     keys = pygame.key.get_pressed()
     clock = 1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else -1
     if keys[pygame.K_x]:
-        glRotatef(2 * clock, *X_AXIS[0][:-1])
-        matrix.matrix_mult(matrix.rotation_matrix(radians(2 * clock), X_AXIS[0][:-1]), Y_AXIS)
+        rotate(True, 2*clock)
     if keys[pygame.K_y]:
-        glRotatef(2 * clock, *Y_AXIS[0][:-1])
-        matrix.matrix_mult(matrix.rotation_matrix(radians(2 * clock), Y_AXIS[0][:-1]), X_AXIS)
+        rotate(False, 2*clock)
+
+
+def mouse_movement(x, y, drag):
+    if drag:
+        rotate(True, x/3)
+        rotate(False, y/3)
 
 
 def main():
@@ -376,16 +389,24 @@ def main():
     gluPerspective(45, (WIDTH / HEIGHT), 0.1, 50.0)
     glTranslatef(0, 0, -15)
     glEnable(GL_DEPTH_TEST)
+    drag = False
 
     clock = pygame.time.Clock()
     while True:
+        y, x = pygame.mouse.get_rel()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                drag=True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                drag = False
+            elif event.type == pygame.MOUSEMOTION:
+                mouse_movement(x, y, drag)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        rotate()
+        rotate_keys()
         cube()
         handle_scramble_keys()
         pygame.display.flip()
