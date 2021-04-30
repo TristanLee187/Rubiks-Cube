@@ -80,8 +80,6 @@ This program uses PyOpenGL to render a cube object in 3D, and wraps that renderi
 
 * Pressing the `r`, `l`, `u`, `d`, `f`, or `b` keys performs the corresponding outer face turn
 
-* Pressing the `x`, `y`, or `z` keys rotates the cube about its x, y, or z axes
-   
-    * Rotating the cube about an axis also rotates the other two axes
+* Pressing the `x` or `y` keys rotates the cube about the x or y axes
     
 * Holding `Shift` while pressing any of the above keys performs the counterclockwise counterpart
