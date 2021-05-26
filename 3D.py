@@ -380,8 +380,8 @@ def rotate_keys():
 
 def mouse_movement(x, y, drag):
     if drag:
-        rotate(True, x/3)
-        rotate(False, y/3)
+        rotate(True, x/3.5)
+        rotate(False, y/3.5)
 
 
 def main():
