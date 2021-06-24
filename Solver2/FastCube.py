@@ -1,4 +1,4 @@
-class FastCube2:
+class FastCube:
     def __init__(self):
         self.ps = list(range(20))
         self.ops = 20 * [1]

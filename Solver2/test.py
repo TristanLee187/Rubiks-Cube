@@ -1,4 +1,4 @@
-from FastCube2 import *
+from FastCube import *
 from G1 import *
 import time
 
@@ -42,15 +42,14 @@ def scramble_num_to_str(scramble):
     return ans
 
 
-cube = FastCube2()
-# speed_check(rta, cube)
-s = '''L2 F R' U' D2 F' L B U' L2 U F2 U F2 R2 L2 F2 D2 R2 L2 '''
-s = scramble_str_to_num(s)
-scrambler(cube, s)
-print(cube)
+if __name__ == '__main__':
+    cube = FastCube()
+    # speed_check(rta, cube)
+    s = input('Scramble: ')
+    s = scramble_str_to_num(s)
+    scrambler(cube, s)
 
-sol = []
-speed_check(id_dfs, cube, 0, sol)
-print(all_good(cube))
-print(cube)
-print(scramble_num_to_str(sol))
+    sol = []
+    speed_check(id_dfs, cube, 0, sol)
+    print(cube)
+    print(scramble_num_to_str(sol))

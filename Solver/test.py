@@ -42,7 +42,7 @@ def scramble_num_to_str(scramble):
 
 if __name__ == '__main__':
     cube = FastCube()
-    s = '''L2 F R' U' D2 F' L B U' L2 U F2 U F2 R2 L2 F2 D2 R2 L2 '''
+    s = input('Scramble: ')
     scrambler(cube, s)
     sol = []
     speed_check(id_dfs, cube, 0, sol)
