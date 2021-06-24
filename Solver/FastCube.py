@@ -1,6 +1,3 @@
-import time
-
-
 def rotate_ba(clock, ba):
     if clock:
         ans = ba[6:] + ba[:6]
@@ -17,7 +14,8 @@ class FastCube:
         self.bottom = 8 * [5]
         self.right = 8 * [2]
         self.left = 8 * [4]
-        self.colors = {0: 'W', 1: 'G', 2: 'R', 3: 'B', 4: 'O', 5: 'Y'}
+        self.colors = ['W', 'G', 'R', 'B', 'O', 'Y']
+        self.moves = [self.U, self.F, self.R, self.B, self.L, self.D]
 
     def __str__(self):
         arr = [3 * [' '] for i in range(3)]
@@ -124,29 +122,24 @@ class FastCube:
             self.bottom[4:7] = self.right[2:5]
             self.right[2:5] = top_row[:3]
 
+    def move(self, num):
+        if num == -1:
+            return
+        if num % 3 == 2:
+            self.moves[num // 3](True)
+            self.moves[num // 3](True)
+        else:
+            self.moves[num // 3](num % 3 == 0)
 
-def rta():
-    t0 = time.time()
-    c = FastCube()
-    i = 0
-    while i < 10 ** 6:
-        c.R(False)
-        c.F(True)
-        c.R(True)
-        c.F(False)
-        i += 1
-    t1 = time.time()
-    print(c)
-    print("Time:", t1 - t0)
+    def undo(self, num):
+        if num == -1:
+            return
+        if num % 3 == 2:
+            self.moves[num // 3](True)
+            self.moves[num // 3](True)
+        else:
+            self.moves[num // 3](num % 3)
 
-
-def test_moves():
-    c = FastCube()
-    s = ['R','U','F','L','D','B','B\'', 'D\'', 'L\'', 'F\'', 'U\'', 'R\'']
-    for move in s:
-        eval('c.{}({})'.format(move[0], len(move) == 1))
-    print(c)
-
-
-# rta()
-test_moves()
+    def get_sticker(self, face, sticker):
+        faces = [self.top, self.front, self.right, self.back, self.left, self.bottom]
+        return faces[face][sticker]
