@@ -19,4 +19,4 @@ Numbers to moves:
   12: L
   15: D
 
-Good edge: can be solved without F or B moves
+Good edge: can be solved without U or D moves

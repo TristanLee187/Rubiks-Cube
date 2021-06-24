@@ -1,6 +1,8 @@
 import time
 from FastCube import FastCube
 from G1 import *
+from itertools import accumulate
+import operator
 
 
 def speed_check(f, *args):
@@ -11,11 +13,10 @@ def speed_check(f, *args):
 
 
 def rta(c):
-    s = 0
     i = 0
-    while i < 10 ** 9:
+    while i < 10 ** 7:
         i += 1
-        s = c.top[0]
+        c.move(0)
 
 
 def scrambler(c, scramble):
@@ -41,11 +42,11 @@ def scramble_num_to_str(scramble):
 
 if __name__ == '__main__':
     cube = FastCube()
-    s = '''L' F' U2 B' R2 U2 U F2 B L2 D L R' U D2 U' R2 U' D D2 U L2 U' U' D' D2 B2 U U F2'''
+    s = '''L2 F R' U' D2 F' L B U' L2 U F2 U F2 R2 L2 F2 D2 R2 L2 '''
     scrambler(cube, s)
     sol = []
     speed_check(id_dfs, cube, 0, sol)
-    print(all_good(cube))
+    # speed_check(rta, cube)
     print(cube)
     print(sol)
     print(scramble_num_to_str(sol))
