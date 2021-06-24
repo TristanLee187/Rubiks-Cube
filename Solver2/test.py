@@ -26,8 +26,8 @@ def scramble_str_to_num(scramble):
     ans = []
     moves = ['U', 'F', 'R', 'B', 'L', 'D']
     for move in scramble.split():
-        add = 3*moves.index(move[0])
-        add += 1*(move[-1]=='\'') + 2*(move[-1]=='2')
+        add = 3 * moves.index(move[0])
+        add += 1 * (move[-1] == '\'') + 2 * (move[-1] == '2')
         ans.append(add)
     return ans
 
@@ -50,6 +50,5 @@ if __name__ == '__main__':
     scrambler(cube, s)
 
     sol = []
-    speed_check(id_dfs, cube, 0, sol)
-    print(cube)
+    speed_check(g1_id_dfs, cube, 0, sol)
     print(scramble_num_to_str(sol))

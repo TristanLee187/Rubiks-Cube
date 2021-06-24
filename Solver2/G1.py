@@ -1,7 +1,3 @@
-from itertools import accumulate
-from operator import and_
-
-
 ALLOWED_MOVES = [
     [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],  # U face
     [0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],  # F face
@@ -13,17 +9,17 @@ ALLOWED_MOVES = [
 ]
 
 
-def all_good(cube):
+def g1_all_good(cube):
     for i in cube.ops[:12]:
-        if i==0:
+        if i == 0:
             return False
     return True
 
 
-def id_dfs(cube, depth, ans):
+def g1_id_dfs(cube, depth, ans):
     def dfs(last):
         if len(ans) == depth:
-            return all_good(cube)
+            return g1_all_good(cube)
         else:
             for turn in ALLOWED_MOVES[last // 3]:
                 cube.move(turn)
@@ -38,4 +34,4 @@ def id_dfs(cube, depth, ans):
     if attempt:
         return True
     ans.clear()
-    id_dfs(cube, depth + 1, ans)
+    g1_id_dfs(cube, depth + 1, ans)

@@ -1,8 +1,6 @@
 import time
 from FastCube import FastCube
 from G1 import *
-from itertools import accumulate
-import operator
 
 
 def speed_check(f, *args):
@@ -47,6 +45,4 @@ if __name__ == '__main__':
     sol = []
     speed_check(id_dfs, cube, 0, sol)
     # speed_check(rta, cube)
-    print(cube)
-    print(sol)
     print(scramble_num_to_str(sol))
