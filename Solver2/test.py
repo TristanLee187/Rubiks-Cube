@@ -1,5 +1,6 @@
 from FastCube import *
 from G1 import *
+from G2 import *
 import time
 
 
@@ -48,7 +49,15 @@ if __name__ == '__main__':
     s = input('Scramble: ')
     s = scramble_str_to_num(s)
     scrambler(cube, s)
+    # print(cube)
 
-    sol = []
-    speed_check(g1_id_dfs, cube, 0, sol)
-    print(scramble_num_to_str(sol))
+    sol1 = []
+    speed_check(g1_id_dfs, cube, 0, sol1)
+    print(scramble_num_to_str(sol1))
+    print(cube)
+
+    sol2 = []
+    speed_check(g2_id_dfs, cube, 0, sol2)
+    print(scramble_num_to_str(sol2))
+    print(cube)
+    # print(g2_all_good(cube))

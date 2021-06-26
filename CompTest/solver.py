@@ -17,7 +17,7 @@
 import time
 import random
 
-random.seed(1873465)
+random.seed(int(input('Seed: ')))
 
 facenames = ["U", "D", "F", "B", "L", "R"]
 affected_cubies = [[0, 1, 2, 3, 0, 1, 2, 3], [4, 7, 6, 5, 4, 5, 6, 7], [0, 9, 4, 8, 0, 3, 5, 4],
@@ -120,4 +120,4 @@ if __name__ == '__main__':
     t0 = time.time()
     solve()
     t1 = time.time()
-    print('Time:', t1 - t0)
+    print('Total time:', t1 - t0)

@@ -20,3 +20,4 @@ Numbers to moves:
   15: D
 
 Good edge: can be solved without U or D moves
+Corner orientation: track left or right sticker

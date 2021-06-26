@@ -1,7 +1,7 @@
 class FastCube:
     def __init__(self):
         self.ps = list(range(20))
-        self.ops = 20 * [1]
+        self.ops = 12 * [1] + 8 * [0]
         self.e_moves = [
             [0, 1, 2, 3], [3, 2, 1, 0], [0, 1, 2, 3],  # U moves
             [2, 5, 10, 6], [6, 10, 5, 2], [2, 5, 10, 6],  # F moves
@@ -10,26 +10,51 @@ class FastCube:
             [3, 6, 11, 7], [7, 11, 6, 3], [3, 6, 11, 7],  # L moves
             [10, 9, 8, 11], [11, 8, 9, 10], [10, 9, 8, 11],  # D moves
         ]
+        self.c_moves = [
+            [12, 13, 14, 15], [15, 14, 13, 12], [12, 13, 14, 15],  # U moves
+            [15, 14, 18, 19], [19, 18, 14, 15], [15, 14, 18, 19],  # F moves
+            [14, 13, 17, 18], [18, 17, 13, 14], [14, 13, 17, 18],  # R moves
+            [13, 12, 16, 17], [17, 16, 12, 13], [13, 12, 16, 17],  # B moves
+            [12, 15, 19, 16], [16, 19, 15, 12], [12, 15, 19, 16],  # L moves
+            [19, 18, 17, 16], [16, 17, 18, 19], [19, 18, 17, 16]  # D moves
+        ]
+        self.co = [1, 2, 0, 2, 0, 1]
 
     def move(self, turn):
         times = max(1, turn % 3)
-        new = self.e_moves[turn].copy()
-        for i in range(times):
-            new.insert(0, new.pop())
-        self.ops[self.e_moves[turn][0]], self.ops[self.e_moves[turn][1]], self.ops[self.e_moves[turn][2]], self.ops[
-            self.e_moves[turn][3]] = self.ops[new[0]], self.ops[new[1]], self.ops[new[2]], self.ops[new[3]]
 
-        self.ps[self.e_moves[turn][0]], self.ps[self.e_moves[turn][1]], self.ps[self.e_moves[turn][2]], self.ps[
-            self.e_moves[turn][3]] = self.ps[new[0]], self.ps[new[1]], self.ps[new[2]], self.ps[new[3]]
+        for i in range(times):
+            last = self.ps[self.e_moves[turn][3]]
+            self.ps[self.e_moves[turn][3]], self.ps[self.e_moves[turn][2]], self.ps[self.e_moves[turn][1]] = \
+                self.ps[self.e_moves[turn][2]], self.ps[self.e_moves[turn][1]], self.ps[self.e_moves[turn][0]]
+            self.ps[self.e_moves[turn][0]] = last
+
+            last = self.ops[self.e_moves[turn][3]]
+            self.ops[self.e_moves[turn][3]], self.ops[self.e_moves[turn][2]], self.ops[self.e_moves[turn][1]] = \
+                self.ops[self.e_moves[turn][2]], self.ops[self.e_moves[turn][1]], self.ops[self.e_moves[turn][0]]
+            self.ops[self.e_moves[turn][0]] = last
+
+            last = self.ps[self.c_moves[turn][3]]
+            self.ps[self.c_moves[turn][3]], self.ps[self.c_moves[turn][2]], self.ps[self.c_moves[turn][1]] = \
+                self.ps[self.c_moves[turn][2]], self.ps[self.c_moves[turn][1]], self.ps[self.c_moves[turn][0]]
+            self.ps[self.c_moves[turn][0]] = last
+
+            last = self.ops[self.c_moves[turn][3]]
+            self.ops[self.c_moves[turn][3]], self.ops[self.c_moves[turn][2]], self.ops[self.c_moves[turn][1]] = \
+                self.ops[self.c_moves[turn][2]], self.ops[self.c_moves[turn][1]], self.ops[self.c_moves[turn][0]]
+            self.ops[self.c_moves[turn][0]] = last
 
         if turn // 3 in [0, 5] and turn % 3 < 2:
-            for num in new:
+            for num in self.e_moves[turn]:
                 self.ops[num] = 1 - self.ops[num]
 
+        if turn % 3 < 2:
+            for num in self.c_moves[turn]:
+                self.ops[num] += self.ops[num] + self.co[turn // 3]
+                self.ops[num] %= 3
+
     def undo(self, turn):
-        base = 3 * (turn // 3)
-        add = [1, 0, 2][turn % 3]
-        self.move(base + add)
+        self.move(3 * (turn // 3) + [1, 0, 2][turn % 3])
 
     def __str__(self):
         return ' '.join(map(str, self.ps)) + '\n' + ' '.join(map(str, self.ops))

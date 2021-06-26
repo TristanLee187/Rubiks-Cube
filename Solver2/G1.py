@@ -1,4 +1,4 @@
-ALLOWED_MOVES = [
+G1_ALLOWED_MOVES = [
     [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],  # U face
     [0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],  # F face
     [0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 15, 16, 17],  # R face
@@ -21,7 +21,7 @@ def g1_id_dfs(cube, depth, ans):
         if len(ans) == depth:
             return g1_all_good(cube)
         else:
-            for turn in ALLOWED_MOVES[last // 3]:
+            for turn in G1_ALLOWED_MOVES[last // 3]:
                 cube.move(turn)
                 ans.append(turn)
                 found = dfs(turn)
