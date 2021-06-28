@@ -1,6 +1,8 @@
 from FastCube import *
 from G1 import *
 from G2 import *
+from G3 import *
+from G4 import *
 import time
 
 
@@ -9,6 +11,7 @@ def speed_check(f, *args):
     f(*args)
     t1 = time.time()
     print("Time:", t1 - t0)
+    return t1 - t0
 
 
 def rta(c):
@@ -51,13 +54,36 @@ if __name__ == '__main__':
     scrambler(cube, s)
     # print(cube)
 
+    total = 0
+    final = ''
+
     sol1 = []
-    speed_check(g1_id_dfs, cube, 0, sol1)
+    total += speed_check(g1_id_dfs, cube, 0, sol1)
+    final += scramble_num_to_str(sol1)
     print(scramble_num_to_str(sol1))
-    print(cube)
+    # print(cube)
 
     sol2 = []
-    speed_check(g2_id_dfs, cube, 0, sol2)
+    total += speed_check(g2_id_dfs, cube, 0, sol2)
+    final += scramble_num_to_str(sol2)
     print(scramble_num_to_str(sol2))
-    print(cube)
-    # print(g2_all_good(cube))
+    # print(cube)
+
+    sol3= []
+    total += speed_check(g3_id_dfs, cube, 0, sol3)
+    final += scramble_num_to_str(sol3)
+    print(scramble_num_to_str(sol3))
+    # print(cube)
+
+    sol4 = []
+    total += speed_check(g4_id_dfs, cube, 0, sol4)
+    final += scramble_num_to_str(sol4)
+    print(scramble_num_to_str(sol4))
+    # print(cube)
+
+    print()
+    print('Total Time:', total)
+    print('Final Solution:', final)
+
+
+# Test scramble: F' B R L U L' R2 U' D' R' F2 U2 L2 U' F2 U' B U' D' L
