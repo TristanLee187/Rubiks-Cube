@@ -1,5 +1,5 @@
 G2_ALLOWED_MOVES = [
-    [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17],  # U face
+    [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1],  # U face
     [2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17],  # F face
     [3, 4, 5, 9, 10, 11, 12, 13, 14, 17],  # R face
     [3, 4, 5, 6, 7, 8, 12, 13, 14, 17],  # B face
@@ -10,10 +10,12 @@ G2_ALLOWED_MOVES = [
 
 
 def g2_all_good(cube):
+    if sum(cube.ops[12:]):
+        return False
     for i in [0, 2, 8, 10]:
-        if cube.ps[i] not in {0, 2, 8, 10}:
+        if cube.ps[i] not in [0, 2, 8, 10]:
             return False
-    return not sum(cube.ops[12:])
+    return True
 
 
 def g2_id_dfs(cube, depth, ans):

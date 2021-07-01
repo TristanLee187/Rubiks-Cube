@@ -28,7 +28,6 @@ def c_check(a, cube):
     return True
 
 
-# probably wrong right now
 def g3_all_good(cube):
     if not check_pieces([1, 3, 9, 11], cube):
         return False
@@ -38,7 +37,6 @@ def g3_all_good(cube):
         return False
     if not c_check([16, 17, 18, 19], cube):
         return False
-
     return True
 
 

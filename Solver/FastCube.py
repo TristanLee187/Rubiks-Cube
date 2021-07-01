@@ -1,145 +1,78 @@
-def rotate_ba(clock, ba):
-    if clock:
-        ans = ba[6:] + ba[:6]
-    else:
-        ans = ba[2:] + ba[:2]
-    return ans
-
-
 class FastCube:
     def __init__(self):
-        self.front = 8 * [1]
-        self.back = 8 * [3]
-        self.top = 8 * [0]
-        self.bottom = 8 * [5]
-        self.right = 8 * [2]
-        self.left = 8 * [4]
-        self.colors = ['W', 'G', 'R', 'B', 'O', 'Y']
-        self.moves = [self.U, self.F, self.R, self.B, self.L, self.D]
+        self.ps = list(range(20))
+        self.ops = 12 * [1] + 8 * [0]
+        self.e_moves = [
+            [0, 1, 2, 3], [3, 2, 1, 0], [0, 1, 2, 3],  # U moves
+            [2, 5, 10, 6], [6, 10, 5, 2], [2, 5, 10, 6],  # F moves
+            [1, 4, 9, 5], [5, 9, 4, 1], [1, 4, 9, 5],  # R moves
+            [0, 7, 8, 4], [4, 8, 7, 0], [0, 7, 8, 4],  # B moves
+            [3, 6, 11, 7], [7, 11, 6, 3], [3, 6, 11, 7],  # L moves
+            [10, 9, 8, 11], [11, 8, 9, 10], [10, 9, 8, 11],  # D moves
+        ]
+        self.c_moves = [
+            [12, 13, 14, 15], [15, 14, 13, 12], [12, 13, 14, 15],  # U moves
+            [15, 14, 18, 19], [19, 18, 14, 15], [15, 14, 18, 19],  # F moves
+            [14, 13, 17, 18], [18, 17, 13, 14], [14, 13, 17, 18],  # R moves
+            [13, 12, 16, 17], [17, 16, 12, 13], [13, 12, 16, 17],  # B moves
+            [12, 15, 19, 16], [16, 19, 15, 12], [12, 15, 19, 16],  # L moves
+            [19, 18, 17, 16], [16, 17, 18, 19], [19, 18, 17, 16]  # D moves
+        ]
+        self.co = [1, 2, 0, 2, 0, 1]
+
+    def move(self, turn):
+        if turn % 3 < 2:
+            last = self.ps[self.e_moves[turn][3]]
+            self.ps[self.e_moves[turn][3]], self.ps[self.e_moves[turn][2]], self.ps[self.e_moves[turn][1]] = \
+                self.ps[self.e_moves[turn][2]], self.ps[self.e_moves[turn][1]], self.ps[self.e_moves[turn][0]]
+            self.ps[self.e_moves[turn][0]] = last
+
+            last = self.ops[self.e_moves[turn][3]]
+            self.ops[self.e_moves[turn][3]], self.ops[self.e_moves[turn][2]], self.ops[self.e_moves[turn][1]] = \
+                self.ops[self.e_moves[turn][2]], self.ops[self.e_moves[turn][1]], self.ops[self.e_moves[turn][0]]
+            self.ops[self.e_moves[turn][0]] = last
+
+            last = self.ps[self.c_moves[turn][3]]
+            self.ps[self.c_moves[turn][3]], self.ps[self.c_moves[turn][2]], self.ps[self.c_moves[turn][1]] = \
+                self.ps[self.c_moves[turn][2]], self.ps[self.c_moves[turn][1]], self.ps[self.c_moves[turn][0]]
+            self.ps[self.c_moves[turn][0]] = last
+
+            last = self.ops[self.c_moves[turn][3]]
+            self.ops[self.c_moves[turn][3]], self.ops[self.c_moves[turn][2]], self.ops[self.c_moves[turn][1]] = \
+                self.ops[self.c_moves[turn][2]], self.ops[self.c_moves[turn][1]], self.ops[self.c_moves[turn][0]]
+            self.ops[self.c_moves[turn][0]] = last
+        else:
+            last3, last2 = self.ps[self.e_moves[turn][3]], self.ps[self.e_moves[turn][2]]
+            self.ps[self.e_moves[turn][3]], self.ps[self.e_moves[turn][2]] = self.ps[self.e_moves[turn][1]], self.ps[
+                self.e_moves[turn][0]]
+            self.ps[self.e_moves[turn][0]], self.ps[self.e_moves[turn][1]] = last2, last3
+
+            last3, last2 = self.ops[self.e_moves[turn][3]], self.ops[self.e_moves[turn][2]]
+            self.ops[self.e_moves[turn][3]], self.ops[self.e_moves[turn][2]] = self.ops[self.e_moves[turn][1]], \
+                                                                               self.ops[self.e_moves[turn][0]]
+            self.ops[self.e_moves[turn][0]], self.ops[self.e_moves[turn][1]] = last2, last3
+
+            last3, last2 = self.ps[self.c_moves[turn][3]], self.ps[self.c_moves[turn][2]]
+            self.ps[self.c_moves[turn][3]], self.ps[self.c_moves[turn][2]] = self.ps[self.c_moves[turn][1]], self.ps[
+                self.c_moves[turn][0]]
+            self.ps[self.c_moves[turn][0]], self.ps[self.c_moves[turn][1]] = last2, last3
+
+            last3, last2 = self.ops[self.c_moves[turn][3]], self.ops[self.c_moves[turn][2]]
+            self.ops[self.c_moves[turn][3]], self.ops[self.c_moves[turn][2]] = self.ops[self.c_moves[turn][1]], \
+                                                                               self.ops[self.c_moves[turn][0]]
+            self.ops[self.c_moves[turn][0]], self.ops[self.c_moves[turn][1]] = last2, last3
+
+        if turn // 3 in [0, 5] and turn % 3 < 2:
+            for num in self.e_moves[turn]:
+                self.ops[num] = 1 - self.ops[num]
+
+        if turn % 3 < 2:
+            for num in self.c_moves[turn]:
+                self.ops[num] += self.ops[num] + self.co[turn // 3]
+                self.ops[num] %= 3
+
+    def undo(self, turn):
+        self.move(3 * (turn // 3) + [1, 0, 2][turn % 3])
 
     def __str__(self):
-        arr = [3 * [' '] for i in range(3)]
-        ans = 11 * ['']
-
-        def face2str(barr, face, colors):
-            indices = [[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0]]
-            for i in range(8):
-                sticker = barr[i]
-                c = colors[sticker]
-                x, y = indices[i]
-                face[x][y] = c + ' '
-            face[1][1] = '  '
-
-        faces = [self.top, self.left, self.front, self.right, self.back, self.bottom]
-        for i in range(6):
-            face2str(faces[i], arr, self.colors)
-            for row in range(3):
-                add = ''.join(arr[row])
-                if i == 0:
-                    ans[row] += 9 * ' ' + add
-                elif i == 5:
-                    ans[8 + row] += 9 * ' ' + add
-                else:
-                    ans[4 + row] += add + '   '
-
-        return '\n'.join(ans)
-
-    def R(self, clock):
-        self.right = rotate_ba(clock, self.right)
-        back_row = self.back[6:] + self.back[:1]
-        faces = [self.top, self.bottom]
-        if not clock:
-            faces[0], faces[1] = faces[1], faces[0]
-        self.back[0], self.back[6:] = faces[0][4], faces[0][2:4]
-        faces[0][2:5] = self.front[2:5]
-        self.front[2:5] = faces[1][2:5]
-        faces[1][2:5] = back_row
-
-    def L(self, clock):
-        self.left = rotate_ba(clock, self.left)
-        back_row = self.back.copy()
-        faces = [self.bottom, self.top]
-        if not clock:
-            faces[0], faces[1] = faces[1], faces[0]
-        self.back[2:4], self.back[4] = faces[0][6:], faces[0][0]
-        faces[0][0], faces[0][6:] = self.front[0], self.front[6:]
-        self.front[0], self.front[6:] = faces[1][0], faces[1][6:]
-        faces[1][0], faces[1][6:] = back_row[4], back_row[2:4]
-
-    def U(self, clock):
-        self.top = rotate_ba(clock, self.top)
-        front_row = self.front[:3]
-        faces = [self.front, self.right, self.back, self.left]
-        if not clock:
-            faces[1], faces[3] = faces[3], faces[1]
-        for i in range(3):
-            faces[i][:3] = faces[i + 1][:3]
-        faces[3][:3] = front_row
-
-    def D(self, clock):
-        self.bottom = rotate_ba(clock, self.bottom)
-        front_row = self.front[4:7]
-        faces = [self.front, self.left, self.back, self.right]
-        if not clock:
-            faces[1], faces[3] = faces[3], faces[1]
-        for i in range(3):
-            faces[i][4:7] = faces[i + 1][4:7]
-        faces[3][4:7] = front_row
-
-    def F(self, clock):
-        self.front = rotate_ba(clock, self.front)
-        top_row = self.top.copy()
-        if clock:
-            self.top[4:7] = self.left[2:5]
-            self.left[2:5] = self.bottom[:3]
-            self.bottom[:2] = self.right[6:]
-            self.bottom[2] = self.right[0]
-            self.right[6:] = top_row[4:6]
-            self.right[0] = top_row[6]
-        else:
-            self.top[4:6] = self.right[6:]
-            self.top[6] = self.right[0]
-            self.right[6:] = self.bottom[:2]
-            self.right[0] = self.bottom[2]
-            self.bottom[:3] = self.left[2:5]
-            self.left[2:5] = top_row[4:7]
-
-    def B(self, clock):
-        self.back = rotate_ba(clock, self.back)
-        top_row = self.top.copy()
-        if clock:
-            self.top[:3] = self.right[2:5]
-            self.right[2:5] = self.bottom[4:7]
-            self.bottom[4:6] = self.left[6:]
-            self.bottom[6] = self.left[0]
-            self.left[6:] = top_row[:2]
-            self.left[0] = top_row[2]
-        else:
-            self.top[:2] = self.left[6:]
-            self.top[2] = self.left[0]
-            self.left[0] = self.bottom[6]
-            self.left[6:] = self.bottom[4:6]
-            self.bottom[4:7] = self.right[2:5]
-            self.right[2:5] = top_row[:3]
-
-    def move(self, num):
-        if num == -1:
-            return
-        if num % 3 == 2:
-            self.moves[num // 3](True)
-            self.moves[num // 3](True)
-        else:
-            self.moves[num // 3](num % 3 == 0)
-
-    def undo(self, num):
-        if num == -1:
-            return
-        if num % 3 == 2:
-            self.moves[num // 3](True)
-            self.moves[num // 3](True)
-        else:
-            self.moves[num // 3](num % 3)
-
-    def get_sticker(self, face, sticker):
-        faces = [self.top, self.front, self.right, self.back, self.left, self.bottom]
-        return faces[face][sticker]
+        return ' '.join(map(str, self.ps)) + '\n' + ' '.join(map(str, self.ops))
