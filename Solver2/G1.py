@@ -11,7 +11,7 @@ G1_ALLOWED_MOVES = [
 
 def g1_all_good(cube):
     for i in cube.ops[:12]:
-        if i == 0:
+        if i:
             return False
     return True
 

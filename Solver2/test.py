@@ -19,7 +19,7 @@ def rta(c):
     d = FastCube()
     s = set()
     i = 0
-    while i < 10 ** 5:
+    while i < 10 ** 6:
         d = c.__copy__()
         if d not in s:
             s.add(d)
@@ -111,4 +111,4 @@ if __name__ == '__main__':
     # speed_check(rta, cube)
 
 # Test scramble: F' B R L U L' R2 U' D' R' F2 U2 L2 U' F2 U' B U' D' L
-# time to beat: around 21 sec for 4, 24.5 for full
+# time to beat: around 21-22 sec for 4, 24-25 for full

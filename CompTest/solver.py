@@ -86,6 +86,7 @@ def solve():
     print(state.state)
     state.route = []
     print('*** solve ***')
+    maxsize = 0
     for phase in range(4):
         current_id, goal_id = state.id_(phase), goal_state.id_(phase)
         states = [state]
@@ -108,11 +109,13 @@ def solve():
                         if next_id not in state_ids:
                             state_ids.add(next_id)
                             next_states.append(next_state)
+                            maxsize = max(maxsize, len(next_states))
                     if phase_ok:
                         break
                 states = next_states
             t1 = time.time()
             print('Time:', t1 - t0)
+    print("Maxsize:", maxsize)
 
 
 if __name__ == '__main__':

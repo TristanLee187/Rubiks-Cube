@@ -76,3 +76,9 @@ class FastCube:
 
     def __str__(self):
         return ' '.join(map(str, self.ps)) + '\n' + ' '.join(map(str, self.ops))
+
+    def __copy__(self):
+        ans = FastCube()
+        ans.ps = self.ps.copy()
+        ans.ops = self.ops.copy()
+        return ans
