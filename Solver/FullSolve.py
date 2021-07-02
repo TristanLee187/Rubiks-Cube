@@ -22,16 +22,19 @@ def g2_all_good(cube):
 
 
 C_OPPOSITES = [
-    18, 17, 16, 19, 14, 13, 12, 15
+    14, 15, 12, 13, 18, 19, 16, 17
 ]
 
 
 def c_check(a, cube):
+    e = 0
     for i in a:
         s = cube.ps[i]
         if s not in a or s not in [i, C_OPPOSITES[i - 12]]:
             return False
-    return True
+        if s == C_OPPOSITES[i - 12]:
+            e += 1
+    return e % 4 == 0
 
 
 def g3_all_good(cube):

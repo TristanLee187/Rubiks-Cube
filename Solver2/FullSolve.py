@@ -16,7 +16,7 @@ def check_pieces(a, cube):
 def g2_all_good(cube):
     if sum(cube.ops[12:]):
         return False
-    if not check_pieces([0, 2, 8, 10], cube):
+    if not check_pieces([0, 1, 2, 3], cube):
         return False
     return True
 
@@ -35,7 +35,7 @@ def c_check(a, cube):
 
 
 def g3_all_good(cube):
-    if not check_pieces([1, 3, 9, 11], cube):
+    if not check_pieces([8, 9, 10, 11], cube):
         return False
     if not check_pieces([4, 5, 6, 7], cube):
         return False

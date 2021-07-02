@@ -9,7 +9,7 @@ G3_ALLOWED_MOVES = [
 ]
 
 C_OPPOSITES = [
-    18, 17, 16, 19, 14, 13, 12, 15
+    14, 15, 12, 13, 18, 19, 16, 17
 ]
 
 
@@ -21,11 +21,14 @@ def check_pieces(a, cube):
 
 
 def c_check(a, cube):
+    e = 0
     for i in a:
         s = cube.ps[i]
         if s not in a or s not in [i, C_OPPOSITES[i - 12]]:
             return False
-    return True
+        if s == C_OPPOSITES[i - 12]:
+            e += 1
+    return e % 4 == 0
 
 
 def g3_all_good(cube):
@@ -46,7 +49,7 @@ def g3_id_dfs(cube, depth, ans):
             return g3_all_good(cube)
         for turn in G3_ALLOWED_MOVES[last // 3]:
             cube.move(turn)
-            found = dfs(turn, d+1, pans)
+            found = dfs(turn, d + 1, pans)
             if found:
                 pans.append(turn)
                 return True

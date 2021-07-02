@@ -8,53 +8,50 @@ G3_ALLOWED_MOVES = [
     [2, 5, 6, 7, 8, 11, 12, 13, 14, 17]  # all allowed moves starting from no moves
 ]
 
+
 C_OPPOSITES = [
-    18, 17, 16, 19, 14, 13, 12, 15
+    14, 15, 12, 13, 18, 19, 16, 17
 ]
 
 
-def check_pieces(a, cube):
-    for i in a:
-        if cube.ps[i] not in a:
-            return False
-    return True
+def g3_state(cube):
+    ans = 0
+    i = 0
+    e = 0
+    while i < 12:
+        ans |= (cube.ps[i] // 4) << (2 * i)
+        i += 1
+    while i < 20:
+        ans |= (((cube.ps[i] // 4) & 1) | (2 * (cube.ps[i] in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
+        e += cube.ps[i] == C_OPPOSITES[i - 12]
+        i += 1
+    ans <<= (e % 4)
+    return ans
 
 
-def c_check(a, cube):
-    for i in a:
-        s = cube.ps[i]
-        if s not in a or s not in [i, C_OPPOSITES[i - 12]]:
-            return False
-    return True
+def g3_solve(cube, goal):
+    cube.scramble = [-1]
+    states = [cube]
+    goal_state = g3_state(goal)
 
+    if states[0] == goal_state:
+        return []
 
-def g3_all_good(cube):
-    if not check_pieces([1, 3, 9, 11], cube):
-        return False
-    if not check_pieces([4, 5, 6, 7], cube):
-        return False
-    if not c_check([12, 13, 14, 15], cube):
-        return False
-    if not c_check([16, 17, 18, 19], cube):
-        return False
-    return True
-
-
-def g3_id_dfs(cube, depth, ans):
-    def dfs(last, d, pans):
-        if d == depth:
-            return g3_all_good(cube)
-        for turn in G3_ALLOWED_MOVES[last // 3]:
-            cube.move(turn)
-            found = dfs(turn, d+1, pans)
-            if found:
-                pans.append(turn)
-                return True
-            cube.undo(turn)
-
-    sol = []
-    attempt = dfs(-1, 0, sol)
-    if attempt:
-        ans += sol[::-1]
-        return True
-    g3_id_dfs(cube, depth + 1, ans)
+    seen = set()
+    while True:
+        new_states = []
+        for cube_state in states:
+            for move in G3_ALLOWED_MOVES[cube_state.scramble[-1] // 3]:
+                next_cube = cube_state.__copy__()
+                next_cube.move(move)
+                next_state = g3_state(next_cube)
+                if next_state == goal_state:
+                    ans = next_cube.scramble[1:]
+                    for turn in ans:
+                        cube.move(turn)
+                    return ans
+                if next_state not in seen:
+                    seen.add(next_state)
+                    new_states.append(next_cube)
+        states = new_states.copy()
+        seen.clear()

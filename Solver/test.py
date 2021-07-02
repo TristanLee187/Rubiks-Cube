@@ -58,32 +58,32 @@ def test_4(cube):
     sol1 = []
     speed_check(g1_id_dfs, cube, 0, sol1)
     final += scramble_num_to_str(sol1)
-    print(scramble_num_to_str(sol1))
+    print(scramble_num_to_str(sol1), '({} moves)'.format(len(sol1)))
     # print(cube)
 
     sol2 = []
     speed_check(g2_id_dfs, cube, 0, sol2)
     final += scramble_num_to_str(sol2)
-    print(scramble_num_to_str(sol2))
+    print(scramble_num_to_str(sol2), '({} moves)'.format(len(sol2)))
     # print(cube)
 
     sol3 = []
     speed_check(g3_id_dfs, cube, 0, sol3)
     final += scramble_num_to_str(sol3)
-    print(scramble_num_to_str(sol3))
+    print(scramble_num_to_str(sol3), '({} moves)'.format(len(sol3)))
     # print(cube)
 
     sol4 = []
     speed_check(g4_id_dfs, cube, 0, sol4)
     final += scramble_num_to_str(sol4)
-    print(scramble_num_to_str(sol4))
+    print(scramble_num_to_str(sol4), '({} moves)'.format(len(sol4)))
     # print(cube)
 
     total = time.time() - t0
 
     print()
     print('Total Time:', total)
-    print('Final Solution:', final)
+    print('Final Solution:', final, '({} moves)'.format(len(final.split())))
 
 
 def test_full(cube):
@@ -111,4 +111,3 @@ if __name__ == '__main__':
     # speed_check(rta, cube)
 
 # Test scramble: F' B R L U L' R2 U' D' R' F2 U2 L2 U' F2 U' B U' D' L
-# time to beat: around 21 sec for 4, 24.5 for full

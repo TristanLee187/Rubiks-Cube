@@ -9,28 +9,36 @@ G1_ALLOWED_MOVES = [
 ]
 
 
-def g1_all_good(cube):
-    for i in cube.ops[:12]:
-        if i:
-            return False
-    return True
+def g1_state(cube):
+    ans = 0
+    for i in range(12):
+        ans |= cube.ops[i] << i
+    return ans
 
 
-def g1_id_dfs(cube, depth, ans):
-    def dfs(last, d, pans):
-        if d == depth:
-            return g1_all_good(cube)
-        for turn in G1_ALLOWED_MOVES[last // 3]:
-            cube.move(turn)
-            found = dfs(turn, d+1, pans)
-            if found:
-                pans.append(turn)
-                return True
-            cube.undo(turn)
+def g1_solve(cube, goal):
+    cube.scramble = [-1]
+    states = [cube]
+    goal_state = g1_state(goal)
 
-    sol = []
-    attempt = dfs(-1, 0, sol)
-    if attempt:
-        ans += sol[::-1]
-        return True
-    g1_id_dfs(cube, depth + 1, ans)
+    if states[0] == goal_state:
+        return []
+
+    seen = set()
+    while True:
+        new_states = []
+        for cube_state in states:
+            for move in G1_ALLOWED_MOVES[cube_state.scramble[-1] // 3]:
+                next_cube = cube_state.__copy__()
+                next_cube.move(move)
+                next_state = g1_state(next_cube)
+                if next_state == goal_state:
+                    ans = next_cube.scramble[1:]
+                    for turn in ans:
+                        cube.move(turn)
+                    return ans
+                if next_state not in seen:
+                    seen.add(next_state)
+                    new_states.append(next_cube)
+        states = new_states.copy()
+        seen.clear()
