@@ -1,93 +1,61 @@
-# Checks for each stage
-def g1_all_good(cube):
-    for i in cube.ops[:12]:
-        if i == 0:
-            return False
-    return True
+from FastCube import *
 
 
-def check_pieces(a, cube):
-    for i in a:
-        if cube.ps[i] not in a:
-            return False
-    return True
+# G1
+def g1_state(cube):
+    ans = 0
+    for i in range(12):
+        ans |= cube.ops[i] << i
+    return ans
 
 
-def g2_all_good(cube):
-    if sum(cube.ops[12:]):
-        return False
-    if not check_pieces([0, 2, 8, 10], cube):
-        return False
-    return True
+# G2
+def g2_state(cube):
+    ans = 0
+    i = 0
+    while i < 12:
+        ans |= (cube.ps[i] // 4 == 0) << i
+        i += 1
+    while i < 20:
+        ans |= cube.ops[i] << (12 + 2 * (i - 12))
+        i += 1
+    return ans
 
 
+# G3
 C_OPPOSITES = [
     14, 15, 12, 13, 18, 19, 16, 17
 ]
 
 
-def c_check(a, cube):
-    e = 0
-    for i in a:
-        s = cube.ps[i]
-        if s not in a or s not in [i, C_OPPOSITES[i - 12]]:
-            return False
-        if s == C_OPPOSITES[i - 12]:
-            e += 1
-    return e % 4 == 0
-
-
-def g3_all_good(cube):
-    if not check_pieces([1, 3, 9, 11], cube):
-        return False
-    if not check_pieces([4, 5, 6, 7], cube):
-        return False
-    if not c_check([12, 13, 14, 15], cube):
-        return False
-    if not c_check([16, 17, 18, 19], cube):
-        return False
-    return True
-
-
-def g4_all_good(cube):
-    for i in range(20):
-        if i != cube.ps[i]:
-            return False
-    return True
-
-
-CHECKS = [g1_all_good, g2_all_good, g3_all_good, g4_all_good]
-
-
-# IDDFS
-def id_dfs(cube, ans, check):
-    def dfs(last, d, pans, depth):
-        if d == depth:
-            return CHECKS[check](cube)
-        for turn in ALLOWED_MOVES[last // 3]:
-            cube.move(turn)
-            found = dfs(turn, d+1, pans, depth)
-            if found:
-                pans.append(turn)
-                return True
-            cube.undo(turn)
-
+def g3_state(cube):
+    ans = 0
     i = 0
-    while True:
-        sol = []
-        attempt = dfs(-1, 0, sol, i)
-        if attempt:
-            ans += sol[::-1]
-            return True
+    e = 0
+    while i < 12:
+        ans |= (cube.ps[i] // 4) << (2 * i)
         i += 1
+    while i < 20:
+        ans |= (((cube.ps[i] // 4) & 1) | (2 * (cube.ps[i] in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
+        e += cube.ps[i] == C_OPPOSITES[i - 12]
+        i += 1
+    ans <<= (e % 4)
+    return ans
 
 
-# G1
+# G4
+def g4_state(cube):
+    ans = 0
+    for i in range(20):
+        ans |= (cube.ps[i] == i) << i
+    return ans
+
+
 ALLOWED_MOVES = [
     set(range(3, 18)),  # U face
     {0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17},  # F face
     {0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 15, 16, 17},  # R face
-    {3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17},  # B face
+    {0, 1, 2, 6, 7, 8, 12, 13, 14, 15, 16, 17},  # B face
     {0, 1, 2, 3, 4, 5, 9, 10, 11, 15, 16, 17},  # L face
     set(range(3, 15)),  # D face
     set(range(18))  # all allowed moves starting from no moves
@@ -101,6 +69,9 @@ REMOVE = [
 ]
 
 
+CHECKS = [g1_state, g2_state, g3_state, g4_state]
+
+
 def scramble_num_to_str(scramble):
     ans = ''
     moves = ['U', 'F', 'R', 'B', 'L', 'D']
@@ -111,18 +82,45 @@ def scramble_num_to_str(scramble):
     return ans
 
 
+def phase_solve(cube, goal, check):
+    def clean_moves():
+        for remove in REMOVE[check]:
+            for i in range(7):
+                if remove in ALLOWED_MOVES[i]:
+                    ALLOWED_MOVES[i].remove(remove)
+
+    cube.scramble = [-1]
+    states = [cube]
+    goal_state = CHECKS[check](goal)
+
+    if CHECKS[check](states[0]) == goal_state:
+        clean_moves()
+        return []
+
+    seen = set()
+    while True:
+        new_states = []
+        for cube_state in states:
+            for move in ALLOWED_MOVES[cube_state.scramble[-1] // 3]:
+                next_cube = cube_state.__copy__()
+                next_cube.move(move)
+                next_state = CHECKS[check](next_cube)
+                if next_state == goal_state:
+                    ans = next_cube.scramble[1:]
+                    for turn in ans:
+                        cube.move(turn)
+                    clean_moves()
+                    return ans
+                if next_state not in seen:
+                    seen.add(next_state)
+                    new_states.append(next_cube)
+        states = new_states.copy()
+        seen.clear()
+
+
 def full_solve(cube):
+    g = FastCube()
     ans = []
     for i in range(4):
-        sol = []
-        id_dfs(cube, sol, i)
-        ans += sol
-
-        for move in ALLOWED_MOVES:
-            for remove in REMOVE[i]:
-                if remove in move:
-                    move.remove(remove)
-
-        print(scramble_num_to_str(sol))
-
+        ans += phase_solve(cube, g, i)
     return ans
