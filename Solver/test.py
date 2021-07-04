@@ -108,8 +108,10 @@ def test_full(cube):
 
 
 def mass_testing(moves):
+    tests = int(input("Number of Tests: "))
     times = []
-    for _ in range(100):
+    lengths = []
+    for _ in range(tests):
         cube = FastCube()
         s = ' '.join(gen_scramble(20))
         print('Scramble {}:'.format(_), s)
@@ -119,6 +121,7 @@ def mass_testing(moves):
         t, f = test_full(cube)
         print()
         times.append(t)
+        lengths.append(len(f.split()))
 
         moves.clear()
         moves += [
@@ -131,7 +134,8 @@ def mass_testing(moves):
             set(range(18))  # all allowed moves starting from no moves
         ]
 
-    print('Average time:', sum(times) / 100)
+    print('Average time:', sum(times) / tests)
+    print('Average solution length:', sum(lengths) / tests)
 
 
 def debug():
