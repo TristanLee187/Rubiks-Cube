@@ -1,3 +1,44 @@
+# Rubik's Cube class
+# The cube is represented as an array of integers 0-19, each representing a corner or edge piece of the cube,
+# and another array pf integers 0-2, the orientations of each of those pieces (0-1 for edges, 0-2 for corners).
+# Moves performed on the cube are represented by integers 0-17. Let a be the set of these integers with
+# a_i == 0 (modulo 3); a_i, a_i + 1, and a_i + 2 are the 90 degree clockwise turn, 90 degree counterclockwise turn, and
+# 180 degree turn of each of the 6 faces.
+# Each move affects 4 edge and 4 corner pieces, detailed in E_MOVES and C_MOVES; their positions and orientations
+# change depending on the move.
+# The following are the assignments of numbers to pieces, moves, and orientations.
+#
+# Numbers of the pieces:
+#
+#               12 0  12
+#               4     5
+#               15 1  14
+#
+#     12 4 15   15 1 14   14 5 13   13 0 12
+#     11   10   10   9    9    8    8    11
+#     16 7 19   19 2 18   18 6 17   17 3 16
+#
+#               19 2 18
+#               9    6
+#               16 3 17
+#
+#
+# Edge orientation: a good edge can be solved without U or D moves; 0 if good, 1 if not
+# Corner orientation: track left or right sticker; 0 if that sticker is facing along the x-axis, 1 for the z-axis,
+#     and 2 for y-axis
+#
+#
+# Numbers to moves:
+#     0: U
+#     3: F
+#     6: R
+#     9: B
+#     12: L
+#     15: D
+# The scramble field is only used in solving the cube; it keeps track of the moves done on the cube in each
+# of the Thistlethwaite algorithm's 4 stages.
+
+
 E_MOVES = [
             [0, 5, 1, 4], [4, 1, 5, 0], [0, 5, 1, 4],  # U moves
             [1, 9, 2, 10], [10, 2, 9, 1], [1, 9, 2, 10],  # F moves

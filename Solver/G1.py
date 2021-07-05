@@ -1,3 +1,6 @@
+# G0 -> G1: all 18 moves allowed
+
+
 G1_ALLOWED_MOVES = [
     [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],  # U face
     [0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],  # F face
@@ -9,6 +12,8 @@ G1_ALLOWED_MOVES = [
 ]
 
 
+# G1 requirement: all edges must be "good", or able to be solved without 90 degree turns of the U or D face.
+# Important information: orientation of the edges at each location.
 def g1_state(cube):
     ans = 0
     for i in range(12):

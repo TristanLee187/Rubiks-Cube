@@ -1,3 +1,7 @@
+# G1 -> G2: all moves besides U, U', D, or D' are allowed, which makes for:
+# U2, F, F', F2, R, R', R2, B, B', B2, L, L', L2, D2
+
+
 G2_ALLOWED_MOVES = [
     [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17],  # U face
     [2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17],  # F face
@@ -9,6 +13,9 @@ G2_ALLOWED_MOVES = [
 ]
 
 
+# G2 requirement: all corners are oriented correctly (left or right sticker must point left or right), and edges in the
+# M slice must all belong in the M slice.
+# Important information: orientation of the corners, and whether or not the edge at each location in the M slice belongs
 def g2_state(cube):
     ans = 0
     i = 0

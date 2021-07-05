@@ -1,3 +1,42 @@
+# A single file containing the FactCube class and implementation of solving the cube via the 4 stages of
+# Thistlethwaite's algorithm.
+#
+# At a high level, the algorithm works by progressing through 4 stages. The cube must meet certain requirements to reach
+# each stage; once a stage is met, some moves are removed from the set of moves needed to solve the cube, such that the
+# requirements of one stage carry over into the next.
+#
+# For example, the first stage consists of the set of any state of the cube (G0), and the set moves needed to reach the
+# second stage (all 18 moves). For a cube to meet the requirements of the second stage, all the edges must be oriented
+# such that they can be placed in their correct location in the correct orientation without quarter turns of the U and D
+# face. Once this stage is reached, quarter turns of the U and D faces are removed from the set of allowed moves; now,
+# when progressing to the third stage, all possible cube states will also meet the requirements of the second stage.
+# Notice that any state in group i+1 is also in group i; i.e., the set of states in group i+1 is a subset of the states
+# in group i. Progression is made in this manner until the fifth stage is reached; only one state meets the
+# requirements for this stage: the solved state. See the corresponding files for details on each stage.
+#
+# We progress through the stages with iterative deepening depth first search (IDDFS). We start at depth 0. For any depth
+# d, we generate all combinations of moves of length d given the allowed moves of the current stage. If one of these
+# combinations moves the cube into the next stage, then we add it to the solution, and move on to the next stage,
+# removing moves from teh set of allowed moves as appropriate.
+# If none of the combinations work, then we increase the depth by 1 and generate all combinations of that length, check
+# those, and so on. This incrementing of the depth ensures that the solution between stages is always the shortest
+# possible length. The scramble field of each FastCube object keeps track of the moves applied to each instance.
+# A note about generating combinations of moves: my implementation minds symmetry of turning faces along the same axis.
+# For example, applying a U face turn (U, U', or U2) twice in a row can be captured by a single U face turn, so this
+# should not be allowed. Also, applying a U move and then a D move has the same affect as applying the D move first then
+# the U move, so only one of these should be allowed.
+#
+# At a lower level, I also use pruning to eliminate branches of this tree (which is very helpful considering branching
+# factors of around 15). Though two different scrambles will very likely produce two different states, each stage
+# considers only certain details about the current state to be important, based on its requirements. For example, the
+# second stage only cares about the orientation of the edge pieces. Therefore, this stage will consider two states with
+# the same orientation of edges at each location on the cube to be the same, even if the actual edge pieces at those
+# locations are different, and regardless of any information about the corner pieces. This pruning reduces the maximum
+# possible runtime from the order of trillions to just over one million (see https://www.jaapsch.net/puzzles/thistle.htm
+# for these factors, as well as an overview of the algorithm from Thistlethwaite's papers). Programmatically, arrays of
+# values can capture this information, but I use integers and bitwise operations to increase speed.
+
+
 E_MOVES = [
             [0, 5, 1, 4], [4, 1, 5, 0], [0, 5, 1, 4],  # U moves
             [1, 9, 2, 10], [10, 2, 9, 1], [1, 9, 2, 10],  # F moves
@@ -130,7 +169,7 @@ def g3_state(cube):
         ans |= (((cube.ps[i] // 4) & 1) | (2 * (cube.ps[i] in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
         e += cube.ps[i] == C_OPPOSITES[i - 12]
         i += 1
-    ans <<= (e % 4)
+    ans |= (e % 4) << (2 * i)
     return ans
 
 

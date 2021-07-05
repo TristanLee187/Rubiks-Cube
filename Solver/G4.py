@@ -1,3 +1,6 @@
+# G3 -> G4 allowed moves: U2, F2, R2, B2, L2, D2
+
+
 G4_ALLOWED_MOVES = [
     [5, 8, 11, 14, 17],  # U face
     [2, 8, 11, 14, 17],  # F face
@@ -9,6 +12,8 @@ G4_ALLOWED_MOVES = [
 ]
 
 
+# G4 requirement: all pieces are in their correct location:
+# Important information: whether or not a location and the piece at that location match, at every location.
 def g4_state(cube):
     ans = 0
     for i in range(20):
