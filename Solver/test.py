@@ -1,4 +1,3 @@
-from FastCube import *
 from G1 import *
 from G2 import *
 from G3 import *
@@ -6,6 +5,7 @@ from G4 import *
 from FullSolve import *
 import time
 from random import choice, random
+from sys import argv
 
 
 def speed_check(f, *args):
@@ -108,7 +108,7 @@ def test_full(cube):
 
 
 def mass_testing(moves):
-    tests = int(input("Number of Tests: "))
+    tests = int(argv[2])
     times = []
     lengths = []
     for _ in range(tests):
@@ -157,7 +157,7 @@ def debug():
 
 
 if __name__ == '__main__':
-    mode = input('Mode: ')
+    mode = argv[1]
     if mode == 'debug':
         debug()
     elif mode == 'Tests':

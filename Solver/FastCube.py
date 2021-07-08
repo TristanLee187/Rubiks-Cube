@@ -10,7 +10,7 @@
 #
 # Numbers of the pieces:
 #
-#               12 0  12
+#               12 0  13
 #               4     5
 #               15 1  14
 #
@@ -19,7 +19,7 @@
 #     16 7 19   19 2 18   18 6 17   17 3 16
 #
 #               19 2 18
-#               9    6
+#               7    6
 #               16 3 17
 #
 #
@@ -40,31 +40,53 @@
 
 
 E_MOVES = [
-            [0, 5, 1, 4], [4, 1, 5, 0], [0, 5, 1, 4],  # U moves
-            [1, 9, 2, 10], [10, 2, 9, 1], [1, 9, 2, 10],  # F moves
-            [5, 8, 6, 9], [9, 6, 8, 5], [5, 8, 6, 9],  # R moves
-            [0, 11, 3, 8], [8, 3, 11, 0], [0, 11, 3, 8],  # B moves
-            [4, 10, 7, 11], [11, 7, 10, 4], [4, 10, 7, 11],  # L moves
-            [2, 6, 3, 7], [7, 3, 6, 2], [2, 6, 3, 7],  # D moves
-        ]
+    [0, 5, 1, 4], [4, 1, 5, 0], [0, 5, 1, 4],  # U moves
+    [1, 9, 2, 10], [10, 2, 9, 1], [1, 9, 2, 10],  # F moves
+    [5, 8, 6, 9], [9, 6, 8, 5], [5, 8, 6, 9],  # R moves
+    [0, 11, 3, 8], [8, 3, 11, 0], [0, 11, 3, 8],  # B moves
+    [4, 10, 7, 11], [11, 7, 10, 4], [4, 10, 7, 11],  # L moves
+    [2, 6, 3, 7], [7, 3, 6, 2], [2, 6, 3, 7],  # D moves
+]
 
 C_MOVES = [
-            [12, 13, 14, 15], [15, 14, 13, 12], [12, 13, 14, 15],  # U moves
-            [15, 14, 18, 19], [19, 18, 14, 15], [15, 14, 18, 19],  # F moves
-            [14, 13, 17, 18], [18, 17, 13, 14], [14, 13, 17, 18],  # R moves
-            [13, 12, 16, 17], [17, 16, 12, 13], [13, 12, 16, 17],  # B moves
-            [12, 15, 19, 16], [16, 19, 15, 12], [12, 15, 19, 16],  # L moves
-            [19, 18, 17, 16], [16, 17, 18, 19], [19, 18, 17, 16]  # D moves
-        ]
+    [12, 13, 14, 15], [15, 14, 13, 12], [12, 13, 14, 15],  # U moves
+    [15, 14, 18, 19], [19, 18, 14, 15], [15, 14, 18, 19],  # F moves
+    [14, 13, 17, 18], [18, 17, 13, 14], [14, 13, 17, 18],  # R moves
+    [13, 12, 16, 17], [17, 16, 12, 13], [13, 12, 16, 17],  # B moves
+    [12, 15, 19, 16], [16, 19, 15, 12], [12, 15, 19, 16],  # L moves
+    [19, 18, 17, 16], [16, 17, 18, 19], [19, 18, 17, 16]  # D moves
+]
 
 CO = [1, 2, 0, 2, 0, 1]
 
+PIECE_LAYOUT = [12, 0, 13, 4, -1, 5, 15, 1, 14, 12, 4, 15, 15, 1, 14, 14, 5, 13, 13, 0, 12, 11, -1, 10, 10, -1, 9, 9,
+                -1, 8, 8, -1, 11, 16, 7, 19, 19, 2, 18, 18, 6, 17, 17, 3, 16, 19, 2, 18, 7, -1, 6, 16, 3, 17]
+
+PIECES_NUMS_TO_COLORS = [('B', 'W'), ('G', 'W'), ('G', 'Y'), ('B', 'Y'), ('O', 'W'), ('R', 'W'), ('R', 'Y'), ('O', 'Y'),
+                         ('B', 'R'), ('G', 'R'), ('G', 'O'), ('B', 'O'), ('B', 'O', 'W'), ('B', 'R', 'W'),
+                         ('G', 'R', 'W'), ('G', 'O', 'W'), ('B', 'O', 'Y'), ('B', 'R', 'Y'), ('G', 'R', 'Y'),
+                         ('G', 'O', 'Y')]
+
+PIECES_COLORS_TO_NUMS = {('B', 'W'): 0, ('G', 'W'): 1, ('G', 'Y'): 2, ('B', 'Y'): 3, ('O', 'W'): 4, ('R', 'W'): 5,
+                         ('R', 'Y'): 6, ('O', 'Y'): 7, ('B', 'R'): 8, ('G', 'R'): 9, ('G', 'O'): 10, ('B', 'O'): 11,
+                         ('B', 'O', 'W'): 12, ('B', 'R', 'W'): 13, ('G', 'R', 'W'): 14, ('G', 'O', 'W'): 15,
+                         ('B', 'O', 'Y'): 16, ('B', 'R', 'Y'): 17, ('G', 'R', 'Y'): 18, ('G', 'O', 'Y'): 19}
+
 
 class FastCube:
-    def __init__(self):
+    def __init__(self, layout=None):
         self.ps = list(range(20))
         self.ops = 20 * [0]
         self.scramble = []
+
+        if layout:
+            stickers = layout.split()
+            z = list(zip(PIECE_LAYOUT, stickers))
+            pieces = [[] for _ in range(20)]
+            for entry in z:
+                if entry[0] != -1:
+                    pieces[entry[0]].append(entry[1])
+            pieces = [tuple(entry) for entry in pieces]
 
     def move(self, turn):
         if turn % 3 < 2:
@@ -95,7 +117,7 @@ class FastCube:
 
             last3, last2 = self.ops[E_MOVES[turn][3]], self.ops[E_MOVES[turn][2]]
             self.ops[E_MOVES[turn][3]], self.ops[E_MOVES[turn][2]] = self.ops[E_MOVES[turn][1]], \
-                                                                               self.ops[E_MOVES[turn][0]]
+                                                                     self.ops[E_MOVES[turn][0]]
             self.ops[E_MOVES[turn][0]], self.ops[E_MOVES[turn][1]] = last2, last3
 
             last3, last2 = self.ps[C_MOVES[turn][3]], self.ps[C_MOVES[turn][2]]
@@ -105,7 +127,7 @@ class FastCube:
 
             last3, last2 = self.ops[C_MOVES[turn][3]], self.ops[C_MOVES[turn][2]]
             self.ops[C_MOVES[turn][3]], self.ops[C_MOVES[turn][2]] = self.ops[C_MOVES[turn][1]], \
-                                                                               self.ops[C_MOVES[turn][0]]
+                                                                     self.ops[C_MOVES[turn][0]]
             self.ops[C_MOVES[turn][0]], self.ops[C_MOVES[turn][1]] = last2, last3
 
         if turn // 3 in [0, 5] and turn % 3 < 2:
