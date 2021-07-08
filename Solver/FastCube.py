@@ -39,6 +39,10 @@
 # of the Thistlethwaite algorithm's 4 stages.
 
 
+from convert import *
+from tester import *
+
+
 E_MOVES = [
     [0, 5, 1, 4], [4, 1, 5, 0], [0, 5, 1, 4],  # U moves
     [1, 9, 2, 10], [10, 2, 9, 1], [1, 9, 2, 10],  # F moves
@@ -59,19 +63,6 @@ C_MOVES = [
 
 CO = [1, 2, 0, 2, 0, 1]
 
-PIECE_LAYOUT = [12, 0, 13, 4, -1, 5, 15, 1, 14, 12, 4, 15, 15, 1, 14, 14, 5, 13, 13, 0, 12, 11, -1, 10, 10, -1, 9, 9,
-                -1, 8, 8, -1, 11, 16, 7, 19, 19, 2, 18, 18, 6, 17, 17, 3, 16, 19, 2, 18, 7, -1, 6, 16, 3, 17]
-
-PIECES_NUMS_TO_COLORS = [('B', 'W'), ('G', 'W'), ('G', 'Y'), ('B', 'Y'), ('O', 'W'), ('R', 'W'), ('R', 'Y'), ('O', 'Y'),
-                         ('B', 'R'), ('G', 'R'), ('G', 'O'), ('B', 'O'), ('B', 'O', 'W'), ('B', 'R', 'W'),
-                         ('G', 'R', 'W'), ('G', 'O', 'W'), ('B', 'O', 'Y'), ('B', 'R', 'Y'), ('G', 'R', 'Y'),
-                         ('G', 'O', 'Y')]
-
-PIECES_COLORS_TO_NUMS = {('B', 'W'): 0, ('G', 'W'): 1, ('G', 'Y'): 2, ('B', 'Y'): 3, ('O', 'W'): 4, ('R', 'W'): 5,
-                         ('R', 'Y'): 6, ('O', 'Y'): 7, ('B', 'R'): 8, ('G', 'R'): 9, ('G', 'O'): 10, ('B', 'O'): 11,
-                         ('B', 'O', 'W'): 12, ('B', 'R', 'W'): 13, ('G', 'R', 'W'): 14, ('G', 'O', 'W'): 15,
-                         ('B', 'O', 'Y'): 16, ('B', 'R', 'Y'): 17, ('G', 'R', 'Y'): 18, ('G', 'O', 'Y'): 19}
-
 
 class FastCube:
     def __init__(self, layout=None):
@@ -80,13 +71,7 @@ class FastCube:
         self.scramble = []
 
         if layout:
-            stickers = layout.split()
-            z = list(zip(PIECE_LAYOUT, stickers))
-            pieces = [[] for _ in range(20)]
-            for entry in z:
-                if entry[0] != -1:
-                    pieces[entry[0]].append(entry[1])
-            pieces = [tuple(entry) for entry in pieces]
+            convert(layout, self)
 
     def move(self, turn):
         if turn % 3 < 2:
@@ -153,3 +138,26 @@ class FastCube:
         ans.ops = self.ops.copy()
         ans.scramble = self.scramble.copy()
         return ans
+
+
+def test(s):
+    cube = FastCube(s)
+    print(cube)
+    test_full(cube)
+
+
+# if __name__ == '__main__':
+#     test('''        R O R
+#         G W G
+#         Y Y B
+#
+# G Y G   O R Y   O R B   W B W
+# Y O Y   O G B   W R B   R B B
+# G W B   Y G G   R W W   O W W
+#
+#         R O Y
+#         R Y G
+#         O O B
+#
+#
+# ''')
