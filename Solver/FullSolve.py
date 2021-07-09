@@ -16,7 +16,7 @@
 # We progress through the stages with iterative deepening depth first search (IDDFS). We start at depth 0. For any depth
 # d, we generate all combinations of moves of length d given the allowed moves of the current stage. If one of these
 # combinations moves the cube into the next stage, then we add it to the solution, and move on to the next stage,
-# removing moves from teh set of allowed moves as appropriate.
+# removing moves from the set of allowed moves as appropriate.
 # If none of the combinations work, then we increase the depth by 1 and generate all combinations of that length, check
 # those, and so on. This incrementing of the depth ensures that the solution between stages is always the shortest
 # possible length. The scramble field of each FastCube object keeps track of the moves applied to each instance.
@@ -28,7 +28,7 @@
 # At a lower level, I also use pruning to eliminate branches of this tree (which is very helpful considering branching
 # factors of around 15). Though two different scrambles will very likely produce two different states, each stage
 # considers only certain details about the current state to be important, based on its requirements. For example, the
-# second stage only cares about the orientation of the edge pieces. Therefore, this stage will consider two states with
+# second stage only cares about the orientation of the edge pieces. Therefore, this stage considers two states with
 # the same orientation of edges at each location on the cube to be the same, even if the actual edge pieces at those
 # locations are different, and regardless of any information about the corner pieces. This pruning reduces the maximum
 # possible runtime from the order of trillions to just over one million (see https://www.jaapsch.net/puzzles/thistle.htm

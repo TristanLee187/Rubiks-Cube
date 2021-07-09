@@ -24,7 +24,9 @@ def interact():
 
     while True:
         command = input('>>>').split()
-        if command[0] == 'help':
+        if not command:
+            pass
+        elif command[0] == 'help':
             for line in help_text:
                 print(line)
         elif command[0] == 'scramble':

@@ -15,7 +15,7 @@ def speed_check(f, *args):
     return t1 - t0, ans
 
 
-def rta(c):
+def rta():
     a = 0
     i = 0
     while i < 10 ** 9:

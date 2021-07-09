@@ -1,3 +1,6 @@
+# file for converting a string representing a cube from the Logic package to a FastCube object
+
+
 PIECE_LAYOUT = [12, 0, 13, 4, -1, 5, 15, 1, 14, 12, 4, 15, 15, 1, 14, 14, 5, 13, 13, 0, 12, 11, -1, 10, 10, -1, 9, 9,
                 -1, 8, 8, -1, 11, 16, 7, 19, 19, 2, 18, 18, 6, 17, 17, 3, 16, 19, 2, 18, 7, -1, 6, 16, 3, 17]
 

@@ -1,5 +1,7 @@
 # single logic file containing the contents of all the other files
 # in the Logic package
+from random import choice, random
+
 
 ############################################################################
 # Cube class
@@ -298,8 +300,6 @@ def z(cube, clock):
 ############################################################################
 # scrambling
 
-from random import choice, random
-
 
 def gen_scramble(n):
     moves = ['R', 'L', 'U', 'D', 'F', 'B']
@@ -324,7 +324,7 @@ def gen_scramble(n):
 def read_scramble(filename):
     try:
         file = open(filename, 'r')
-    except:
+    except FileNotFoundError:
         print('File not found')
         return []
     scramble = file.readline().split()
@@ -334,7 +334,7 @@ def read_scramble(filename):
 def see_scramble(cube, filename):
     try:
         file = open(filename, 'r')
-    except:
+    except FileNotFoundError:
         print('File not found')
         return
     # top face

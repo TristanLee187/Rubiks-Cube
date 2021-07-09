@@ -40,7 +40,6 @@
 
 
 from convert import *
-from tester import *
 
 
 E_MOVES = [
@@ -138,26 +137,3 @@ class FastCube:
         ans.ops = self.ops.copy()
         ans.scramble = self.scramble.copy()
         return ans
-
-
-def test(s):
-    cube = FastCube(s)
-    print(cube)
-    test_full(cube)
-
-
-# if __name__ == '__main__':
-#     test('''        R O R
-#         G W G
-#         Y Y B
-#
-# G Y G   O R Y   O R B   W B W
-# Y O Y   O G B   W R B   R B B
-# G W B   Y G G   R W W   O W W
-#
-#         R O Y
-#         R Y G
-#         O O B
-#
-#
-# ''')
