@@ -19,3 +19,7 @@ def solver():
     cube = FastCube(argv[1])
     ans = full_solve(cube)
     return scramble_num_to_str(ans)
+
+
+if __name__ == '__main__':
+    print(solver())

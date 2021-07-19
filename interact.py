@@ -1,6 +1,7 @@
 # Terminal based interactive script
 
 from Logic import logic
+from subprocess import run
 
 
 def interact():
@@ -19,6 +20,7 @@ def interact():
                  '`see filename` gets the colors of the stickers of each face of the cube in a flat format',
                  '\tfrom filename (a text file), and assigns those colors to the cube (see layout.txt for an example)',
                  '`reset` replaces the cube with a new (solved) cube object',
+                 '`solve` uses the solver in the Solver package to get a solution to the scrambled cube, and prints it'
                  '`print` prints the cube in a flat layout',
                  '`quit` stops the interactive script']
 
@@ -42,6 +44,11 @@ def interact():
             logic.see_scramble(cube, command[1])
         elif command[0] == 'reset':
             cube = logic.Cube()
+        elif command[0] == 'solve':
+            sol = run(['pypy3', 'Solver/solver.py', cube.__str__()], capture_output=True)
+            sol = sol.stdout.decode('utf-8').strip()
+            print('Solution: ' + sol)
+            logic.scrambler(cube, sol.split())
         elif command[0] == 'print':
             print()
             print(cube)
