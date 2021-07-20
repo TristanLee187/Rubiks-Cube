@@ -45,6 +45,7 @@ def interact():
         elif command[0] == 'reset':
             cube = logic.Cube()
         elif command[0] == 'solve':
+            print('Solving...')
             sol = run(['pypy3', 'Solver/solver.py', cube.__str__()], capture_output=True)
             sol = sol.stdout.decode('utf-8').strip()
             print('Solution: ' + sol)

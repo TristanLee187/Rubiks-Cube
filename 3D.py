@@ -4,6 +4,7 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from math import sin, cos, ceil, radians
+from subprocess import run
 import matrix
 
 pygame.init()
@@ -338,7 +339,7 @@ def scrambler_3d(s):
     # rotate_tail()
 
 
-def handle_scramble_keys():
+def handle_keys():
     keys = pygame.key.get_pressed()
     clock = '\'' if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else ''
     scramble = []
@@ -357,6 +358,12 @@ def handle_scramble_keys():
     elif keys[pygame.K_s]:
         scramble += logic.gen_scramble(SCRAMBLE_LENGTH)
         print("Scramble:", *scramble)
+    elif keys[pygame.K_SPACE]:
+        print('Solving...')
+        sol = run(['pypy3', 'Solver/solver.py', CUBE.__str__()], capture_output=True)
+        sol = sol.stdout.decode('utf-8').strip()
+        print('Solution: ' + sol)
+        scramble += sol.split()
     scrambler_3d(scramble)
 
 
@@ -408,7 +415,7 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         rotate_keys()
         cube()
-        handle_scramble_keys()
+        handle_keys()
         pygame.display.flip()
         clock.tick(FPS)
 

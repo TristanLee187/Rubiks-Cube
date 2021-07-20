@@ -3,6 +3,7 @@
 from Logic import logic
 import pygame
 from math import sin, cos, radians
+from subprocess import run
 
 pygame.init()
 pygame.display.set_caption('Rubik\'s Cube')
@@ -176,9 +177,10 @@ Y = button(BUTTON_COLOR, OFFSET_X + SPACE, OFFSET_Y + 3 * SPACE, BUTTON_SIZE, BU
 Z = button(BUTTON_COLOR, OFFSET_X + 2 * SPACE, OFFSET_Y + 3 * SPACE, BUTTON_SIZE, BUTTON_SIZE, 'z')
 reset = button(BUTTON_COLOR, OFFSET_X, OFFSET_Y + 4 * SPACE, 2.5 * BUTTON_SIZE, BUTTON_SIZE, 'Reset')
 scramble = button(BUTTON_COLOR, OFFSET_X, OFFSET_Y + 5 * SPACE, 3.75 * BUTTON_SIZE, BUTTON_SIZE, 'Scramble')
+solve = button(BUTTON_COLOR, OFFSET_X + 3 * SPACE, OFFSET_Y + 5 * SPACE, 2.25 * BUTTON_SIZE, BUTTON_SIZE, 'Solve')
 Help = button(BUTTON_COLOR, WIDTH - BUTTON_SIZE - OFFSET_X, OFFSET_Y + 5 * SPACE, BUTTON_SIZE, BUTTON_SIZE, '?')
-switch = button(BUTTON_COLOR, WIDTH - 3 * BUTTON_SIZE - OFFSET_X, OFFSET_Y, 2.5 * BUTTON_SIZE, BUTTON_SIZE, 'Switch')
-buttons = [right, left, mid, up, down, equ, front, back, s, X, Y, Z, reset, scramble, Help, switch]
+switch = button(BUTTON_COLOR, WIDTH - 2.5 * BUTTON_SIZE - OFFSET_X, OFFSET_Y, 2.5 * BUTTON_SIZE, BUTTON_SIZE, 'Switch')
+buttons = [right, left, mid, solve, up, down, equ, front, back, s, X, Y, Z, reset, scramble, Help, switch]
 
 
 def help_function():
@@ -190,6 +192,8 @@ def help_function():
                  'Pressing `Reset` returns the cube to the solved state and standard orientation.',
                  'Pressing `Scramble` applies a random, 20 move scramble to the cube, and prints the scramble to',
                  '   standard output.',
+                 'Pressing `Solve` gets a solution to the scrambled cube, prints it to standard output, and applies it',
+                 '   to the cube.',
                  'Pressing `Switch` switches the viewing layout of the cube; if you`re viewing it in a flat layout,',
                  '   the view changes to an isometric projection, and vice versa.',
                  '  -For the flat layout, the top and bottom faces of the cube are in their respective places; the',
@@ -236,6 +240,12 @@ def handle_buttons(cube, mode, pos):
                     global CUBE_SWITCH
                     CUBE_SWITCH = not CUBE_SWITCH
                     setup_win(cube)
+                elif b.text == 'Solve':
+                    print('Solving...')
+                    sol = run(['pypy3', 'Solver/solver.py', cube.__str__()], capture_output=True)
+                    sol = sol.stdout.decode('utf-8').strip()
+                    print('Solution: ' + sol)
+                    logic.scrambler(cube, sol.split())
                 else:
                     eval('logic.' + b.text + '(cube,' + str(not (pygame.key.get_mods() & pygame.KMOD_SHIFT ^
                                                                  pygame.mouse.get_pressed(3)[2])) + ')')
