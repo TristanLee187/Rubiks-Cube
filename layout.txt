@@ -1,11 +1,11 @@
-        W Y W
-        Y W Y
-        W Y W
+        O O O
+        W W Y
+        W G G
 
-O R O   G B G   R O R   B G B
-R O R   B G B   O R O   G B G
-O R O   G B G   R O R   B G B
+G B R   B W W   O R B   Y Y Y
+B O W   O G B   Y R Y   G B R
+O G Y   G R G   W B R   B R W
 
-        Y W Y
-        W Y W
-        Y W Y
+        R W R
+        O Y O
+        B G Y

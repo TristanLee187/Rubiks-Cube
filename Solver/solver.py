@@ -15,11 +15,11 @@ def scramble_num_to_str(scramble):
     return ans
 
 
-def solver():
-    cube = FastCube(argv[1])
+def solver(layout):
+    cube = FastCube(layout)
     ans = full_solve(cube)
     return scramble_num_to_str(ans)
 
 
 if __name__ == '__main__':
-    print(solver())
+    print(solver(argv[1]))

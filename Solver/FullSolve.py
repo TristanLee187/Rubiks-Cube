@@ -34,9 +34,13 @@
 # possible runtime from the order of trillions to just over one million (see https://www.jaapsch.net/puzzles/thistle.htm
 # for these factors, as well as an overview of the algorithm from Thistlethwaite's papers). Programmatically, arrays of
 # values can capture this information, but I use integers and bitwise operations to increase speed.
+#
+# Finally, I implement a function to simplify a solution to decrease the move count. For example, the scramble 'U U2' is
+# equivalent to just 'U'', and 'R L R' is equivalent to 'R2 L'.
 
 
 from FastCube import FastCube
+from collections import defaultdict
 
 
 # G1 check
@@ -110,16 +114,6 @@ REMOVE = [
 CHECKS = [g1_state, g2_state, g3_state, g4_state]
 
 
-def scramble_num_to_str(scramble):
-    ans = ''
-    moves = ['U', 'F', 'R', 'B', 'L', 'D']
-    for num in scramble:
-        add = moves[num // 3]
-        add += ['', '\'', '2'][num % 3]
-        ans += add + ' '
-    return ans
-
-
 def phase_solve(cube, goal, check):
     def clean_moves():
         for remove in REMOVE[check]:
@@ -156,9 +150,39 @@ def phase_solve(cube, goal, check):
         seen.clear()
 
 
+def sub_cond(c):
+    collect = defaultdict(int)
+    for move in c:
+        turn = move % 3
+        collect[move // 3] += (1 + (turn >> 1)) - 2 * (turn & 1)
+    ans = []
+    for move in collect:
+        turns = collect[move] % 4
+        if turns:
+            turn = (turns >> 1) + (not (turns & 1))
+            ans.append(3 * move + turn)
+    return ans
+
+
+def cond(s):
+    axes = {0: 0, 15: 0, 3: 1, 9: 1, 6: 2, 12: 2}
+    ans = []
+    collect = []
+    last_axis = -1
+    for move in s:
+        axis = axes[move - move % 3]
+        if axis != last_axis:
+            sub = sub_cond(collect)
+            ans += sub
+            last_axis = axis
+        collect.append(move)
+    ans += sub_cond(collect)
+    return ans
+
+
 def full_solve(cube):
     g = FastCube()
     ans = []
     for i in range(4):
         ans += phase_solve(cube, g, i)
-    return ans
+    return cond(ans)
