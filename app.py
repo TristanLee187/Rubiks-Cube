@@ -44,7 +44,7 @@ class button:
             pygame.draw.rect(win, outline, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
 
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height), 0)
-        primeless_buttons = ['Reset', 'Scramble', '?', 'Switch']
+        primeless_buttons = ['Reset', 'Scramble', '?', 'Switch', 'Solve']
 
         if self.text != '':
             font = pygame.font.SysFont('Arial Black', 30)
@@ -189,12 +189,12 @@ def help_function():
                  '  -Holding Shift while pressing one of these buttons performs the counterclockwise counterpart.',
                  '  -Using right click has the same effect.',
                  '  -Doing both of these simultaneously does the clockwise move (same as a regular button press).',
-                 'Pressing `Reset` returns the cube to the solved state and standard orientation.',
-                 'Pressing `Scramble` applies a random, 20 move scramble to the cube, and prints the scramble to',
+                 'Clicking `Reset` returns the cube to the solved state and standard orientation.',
+                 'Clicking `Scramble` applies a random, 20 move scramble to the cube, and prints the scramble to',
                  '   standard output.',
-                 'Pressing `Solve` gets a solution to the scrambled cube, prints it to standard output, and applies it',
+                 'Clicking `Solve` gets a solution to the scrambled cube, prints it to standard output, and applies it',
                  '   to the cube.',
-                 'Pressing `Switch` switches the viewing layout of the cube; if you`re viewing it in a flat layout,',
+                 'Clicking `Switch` switches the viewing layout of the cube; if you`re viewing it in a flat layout,',
                  '   the view changes to an isometric projection, and vice versa.',
                  '  -For the flat layout, the top and bottom faces of the cube are in their respective places; the',
                  '      faces in the middle, from left to right, are the cube`s left, front, right, and back faces.',

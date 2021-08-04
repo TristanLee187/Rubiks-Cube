@@ -74,7 +74,7 @@ This program uses PyGame to run a button based GUI:
 
 * Clicking 'Scramble' applies a random, 20 move scramble to the cube, and prints the scramble to standard output
 
-* Pressing 'Solve' gets a solution to the scrambled cube, prints it to standard output, and applies it to the cube
+* Clicking 'Solve' gets a solution to the scrambled cube, prints it to standard output, and applies it to the cube
 
 * Clicking 'Switch' switches the viewing layout of the cube; if you`re viewing it in a flat layout, the view changes to an isometric projection, and vice versa
 
