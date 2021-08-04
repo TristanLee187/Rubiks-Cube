@@ -1,3 +1,7 @@
+# Using this tester:
+# Mass testing of the solver from FullSolve: pypy3 tester.py Tests n, where n is the number of random scrambles to test
+
+
 from G1 import *
 from G2 import *
 from G3 import *

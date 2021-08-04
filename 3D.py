@@ -5,7 +5,6 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from math import sin, cos, ceil, radians
 from subprocess import run
-import matrix
 
 pygame.init()
 
@@ -367,28 +366,59 @@ def handle_keys():
     scrambler_3d(scramble)
 
 
+# matrix operations for mouse rotation
+def matrix_mult(m1, m2):
+    point = 0
+    for row in m2:
+        # get a copy of the next point
+        tmp = row[:]
+
+        for r in range(4):
+            m2[point][r] = (m1[0][r] * tmp[0] +
+                            m1[1][r] * tmp[1] +
+                            m1[2][r] * tmp[2] +
+                            m1[3][r] * tmp[3])
+        point += 1
+
+
+def rotation_matrix(theta, u):
+    ans = [[cos(theta) + u[0] ** 2 * (1 - cos(theta)),
+            u[0] * u[1] * (1 - cos(theta)) - u[2] * sin(theta),
+            u[0] * u[2] * (1 - cos(theta)) + u[1] * sin(theta)],
+           [u[0] * u[1] * (1 - cos(theta)) + u[2] * sin(theta),
+            cos(theta) + u[1] ** 2 * (1 - cos(theta)),
+            u[1] * u[2] * (1 - cos(theta)) - u[0] * sin(theta)],
+           [u[0] * u[2] * (1 - cos(theta)) - u[1] * sin(theta),
+            u[1] * u[2] * (1 - cos(theta)) + u[0] * sin(theta),
+            cos(theta) + u[2] ** 2 * (1 - cos(theta))]]
+    for i in range(3):
+        ans[i].append(0)
+    ans.append([0, 0, 0, 0])
+    return ans
+
+
 def rotate(axis, mul):
     if axis:
         glRotatef(mul, *X_AXIS[0][:-1])
-        matrix.matrix_mult(matrix.rotation_matrix(radians(mul), X_AXIS[0][:-1]), Y_AXIS)
+        matrix_mult(rotation_matrix(radians(mul), X_AXIS[0][:-1]), Y_AXIS)
     else:
         glRotatef(mul, *Y_AXIS[0][:-1])
-        matrix.matrix_mult(matrix.rotation_matrix(radians(mul), Y_AXIS[0][:-1]), X_AXIS)
+        matrix_mult(rotation_matrix(radians(mul), Y_AXIS[0][:-1]), X_AXIS)
 
 
 def rotate_keys():
     keys = pygame.key.get_pressed()
     clock = 1 if (pygame.key.get_mods() & pygame.KMOD_SHIFT) else -1
     if keys[pygame.K_x]:
-        rotate(True, 2*clock)
+        rotate(True, 2 * clock)
     if keys[pygame.K_y]:
-        rotate(False, 2*clock)
+        rotate(False, 2 * clock)
 
 
 def mouse_movement(x, y, drag):
     if drag:
-        rotate(True, x/3.5)
-        rotate(False, y/3.5)
+        rotate(True, x / 3.5)
+        rotate(False, y / 3.5)
 
 
 def main():
@@ -406,7 +436,7 @@ def main():
                 pygame.quit()
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                drag=True
+                drag = True
             elif event.type == pygame.MOUSEBUTTONUP:
                 drag = False
             elif event.type == pygame.MOUSEMOTION:
@@ -420,4 +450,5 @@ def main():
         clock.tick(FPS)
 
 
-main()
+if __name__ == '__main__':
+    main()
