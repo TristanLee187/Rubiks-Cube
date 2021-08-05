@@ -101,7 +101,7 @@ This program uses PyOpenGL to render a cube object in 3D, and wraps that renderi
 
 ## Notes on the Solver
 
-####My solver implements Thistlethwaite's Algorithm to solve the cube, detailed below.
+#### My solver implements Thistlethwaite's Algorithm to solve the cube, detailed below.
 
 At a high level, the algorithm works by progressing through 4 stages. The cube must meet certain requirements to reach
 each stage; once a stage is met, some moves are removed from the set of moves needed to solve the cube, such that the
@@ -170,7 +170,7 @@ Finally, I implement a function to simplify a solution to possibly decrease the 
 the solution rotate along the same axis. For example, the scramble `U U2` is equivalent to just `U'`, and `R L R` is 
 equivalent to `R2 L`.
 
-####Performance
+#### Performance
 Using the mass testing functionality of tester.py in the Solver package (run with `pypy3 tester.py Tests 100`) multiple
 times, I arrived at the following per-solve statistics:
 
