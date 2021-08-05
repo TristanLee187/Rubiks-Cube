@@ -1,11 +1,9 @@
 # The implementation of Thistlethwaite's algorithm, see the README for details.
 
-
 from FastCube import FastCube
 from collections import defaultdict
 
 
-# G1 check
 def g1_state(cube):
     ans = 0
     for i in range(12):
@@ -13,7 +11,6 @@ def g1_state(cube):
     return ans
 
 
-# G2 check
 def g2_state(cube):
     ans = 0
     i = 0
@@ -26,7 +23,6 @@ def g2_state(cube):
     return ans
 
 
-# G3 check
 C_OPPOSITES = [
     14, 15, 12, 13, 18, 19, 16, 17
 ]
@@ -47,7 +43,6 @@ def g3_state(cube):
     return ans
 
 
-# G4 check
 def g4_state(cube):
     ans = 0
     for i in range(20):
