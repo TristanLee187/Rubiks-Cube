@@ -61,9 +61,9 @@ ALLOWED_MOVES = [
 ]
 
 REMOVE = [
-    [0, 1, 15, 16],  # G2
-    [3, 4, 9, 10],  # G3
-    [6, 7, 12, 13],  # G4
+    [0, 1, 15, 16],  # remove these moves to get G1 moves
+    [3, 4, 9, 10],  # G2
+    [6, 7, 12, 13],  # G3
     []
 ]
 

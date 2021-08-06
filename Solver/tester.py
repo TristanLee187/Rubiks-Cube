@@ -178,5 +178,3 @@ if __name__ == '__main__':
             test_4(cube)
         if mode == 'full':
             test_full(cube)
-
-# Test scramble: F' B R L U L' R2 U' D' R' F2 U2 L2 U' F2 U' B U' D' L
