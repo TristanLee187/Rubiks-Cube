@@ -67,7 +67,6 @@ REMOVE = [
     []
 ]
 
-
 CHECKS = [g1_state, g2_state, g3_state, g4_state]
 
 
@@ -123,18 +122,20 @@ def sub_cond(c):
 
 def cond(s):
     axes = {0: 0, 15: 0, 3: 1, 9: 1, 6: 2, 12: 2}
-    ans = []
-    collect = []
-    last_axis = -1
-    for move in s:
+    ans = [s[0]]
+    p = 0
+    for i in range(1, len(s)):
+        move = s[i]
         axis = axes[move - move % 3]
-        if axis != last_axis:
-            sub = sub_cond(collect)
+        if not ans or axis != axes[ans[p] - ans[p] % 3]:
+            ans.append(move)
+            p = len(ans) - 1
+        else:
+            sub = sub_cond(ans[p:] + [move])
+            ans[p:] = []
             ans += sub
-            last_axis = axis
-            collect.clear()
-        collect.append(move)
-    ans += sub_cond(collect)
+            if not sub:
+                p -= 1
     return ans
 
 
