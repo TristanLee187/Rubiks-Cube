@@ -13,6 +13,7 @@ from FullSolve import *
 import time
 from random import choice, random
 from sys import argv
+import cProfile
 
 
 def speed_check(f, *args):
@@ -163,7 +164,7 @@ def debug():
     test_full(cube)
 
 
-if __name__ == '__main__':
+def main():
     mode = argv[1]
     if mode == 'debug':
         debug()
@@ -178,3 +179,9 @@ if __name__ == '__main__':
             test_4(cube)
         if mode == 'full':
             test_full(cube)
+
+
+if __name__ == '__main__':
+    main()
+
+# cProfile.run('main()')

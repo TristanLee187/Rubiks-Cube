@@ -93,6 +93,14 @@ class FastCube:
             self.ops[C_MOVES[turn][3]], self.ops[C_MOVES[turn][2]], self.ops[C_MOVES[turn][1]] = \
                 self.ops[C_MOVES[turn][2]], self.ops[C_MOVES[turn][1]], self.ops[C_MOVES[turn][0]]
             self.ops[C_MOVES[turn][0]] = last
+
+            for num in C_MOVES[turn]:
+                self.ops[num] += self.ops[num] + CO[turn // 3]
+                self.ops[num] %= 3
+
+            if turn // 3 in [0, 5]:
+                for num in E_MOVES[turn]:
+                    self.ops[num] = 1 - self.ops[num]
         else:
             last3, last2 = self.ps[E_MOVES[turn][3]], self.ps[E_MOVES[turn][2]]
             self.ps[E_MOVES[turn][3]], self.ps[E_MOVES[turn][2]] = self.ps[E_MOVES[turn][1]], self.ps[
@@ -113,15 +121,6 @@ class FastCube:
             self.ops[C_MOVES[turn][3]], self.ops[C_MOVES[turn][2]] = self.ops[C_MOVES[turn][1]], \
                                                                      self.ops[C_MOVES[turn][0]]
             self.ops[C_MOVES[turn][0]], self.ops[C_MOVES[turn][1]] = last2, last3
-
-        if turn // 3 in [0, 5] and turn % 3 < 2:
-            for num in E_MOVES[turn]:
-                self.ops[num] = 1 - self.ops[num]
-
-        if turn % 3 < 2:
-            for num in C_MOVES[turn]:
-                self.ops[num] += self.ops[num] + CO[turn // 3]
-                self.ops[num] %= 3
 
         self.scramble.append(turn)
 
