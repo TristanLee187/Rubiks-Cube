@@ -124,9 +124,6 @@ class FastCube:
 
         self.scramble.append(turn)
 
-    def undo(self, turn):
-        self.move(3 * (turn // 3) + [1, 0, 2][turn % 3])
-
     def __str__(self):
         return ' '.join(map(str, self.ps)) + '\n' + ' '.join(map(str, self.ops))
 
