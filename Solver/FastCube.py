@@ -63,16 +63,9 @@ C_MOVES = [
 CO = [1, 2, 0, 2, 0, 1]
 
 
-def rotate_one(a, b, c):
-    last = a[b[c][3]]
-    a[b[c][3]], a[b[c][2]], a[b[c][1]] = a[b[c][2]], a[b[c][1]], a[b[c][0]]
-    a[b[c][0]] = last
-
-
-def rotate_two(a, b, c):
-    last3, last2 = a[b[c][3]], a[b[c][2]]
-    a[b[c][3]], a[b[c][2]] = a[b[c][1]], a[b[c][0]]
-    a[b[c][0]], a[b[c][1]] = last2, last3
+def rotate(a, b, c, offset):
+    a[b[c][3]], a[b[c][2]], a[b[c][1]], a[b[c][0]] = \
+        a[b[c][3-offset]], a[b[c][2-offset]], a[b[c][1-offset]], a[b[c][0-offset]]
 
 
 class FastCube:
@@ -85,12 +78,13 @@ class FastCube:
             convert(layout, self)
 
     def move(self, turn):
-        if turn % 3 < 2:
-            rotate_one(self.ps, E_MOVES, turn)
-            rotate_one(self.ops, E_MOVES, turn)
-            rotate_one(self.ps, C_MOVES, turn)
-            rotate_one(self.ops, C_MOVES, turn)
+        offset = ((turn % 3) >> 1)+1
+        rotate(self.ps, E_MOVES, turn, offset)
+        rotate(self.ops, E_MOVES, turn, offset)
+        rotate(self.ps, C_MOVES, turn, offset)
+        rotate(self.ops, C_MOVES, turn, offset)
 
+        if offset == 1:
             for num in C_MOVES[turn]:
                 self.ops[num] += self.ops[num] + CO[turn // 3]
                 self.ops[num] %= 3
@@ -98,11 +92,6 @@ class FastCube:
             if turn // 3 in [0, 5]:
                 for num in E_MOVES[turn]:
                     self.ops[num] ^= 1
-        else:
-            rotate_two(self.ps, E_MOVES, turn)
-            rotate_two(self.ops, E_MOVES, turn)
-            rotate_two(self.ps, C_MOVES, turn)
-            rotate_two(self.ops, C_MOVES, turn)
 
         self.scramble.append(turn)
 
