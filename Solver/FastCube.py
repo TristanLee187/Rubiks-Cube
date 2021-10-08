@@ -63,6 +63,18 @@ C_MOVES = [
 CO = [1, 2, 0, 2, 0, 1]
 
 
+def rotate_one(a, b, c):
+    last = a[b[c][3]]
+    a[b[c][3]], a[b[c][2]], a[b[c][1]] = a[b[c][2]], a[b[c][1]], a[b[c][0]]
+    a[b[c][0]] = last
+
+
+def rotate_two(a, b, c):
+    last3, last2 = a[b[c][3]], a[b[c][2]]
+    a[b[c][3]], a[b[c][2]] = a[b[c][1]], a[b[c][0]]
+    a[b[c][0]], a[b[c][1]] = last2, last3
+
+
 class FastCube:
     def __init__(self, layout=None):
         self.ps = list(range(20))
@@ -74,25 +86,10 @@ class FastCube:
 
     def move(self, turn):
         if turn % 3 < 2:
-            last = self.ps[E_MOVES[turn][3]]
-            self.ps[E_MOVES[turn][3]], self.ps[E_MOVES[turn][2]], self.ps[E_MOVES[turn][1]] = \
-                self.ps[E_MOVES[turn][2]], self.ps[E_MOVES[turn][1]], self.ps[E_MOVES[turn][0]]
-            self.ps[E_MOVES[turn][0]] = last
-
-            last = self.ops[E_MOVES[turn][3]]
-            self.ops[E_MOVES[turn][3]], self.ops[E_MOVES[turn][2]], self.ops[E_MOVES[turn][1]] = \
-                self.ops[E_MOVES[turn][2]], self.ops[E_MOVES[turn][1]], self.ops[E_MOVES[turn][0]]
-            self.ops[E_MOVES[turn][0]] = last
-
-            last = self.ps[C_MOVES[turn][3]]
-            self.ps[C_MOVES[turn][3]], self.ps[C_MOVES[turn][2]], self.ps[C_MOVES[turn][1]] = \
-                self.ps[C_MOVES[turn][2]], self.ps[C_MOVES[turn][1]], self.ps[C_MOVES[turn][0]]
-            self.ps[C_MOVES[turn][0]] = last
-
-            last = self.ops[C_MOVES[turn][3]]
-            self.ops[C_MOVES[turn][3]], self.ops[C_MOVES[turn][2]], self.ops[C_MOVES[turn][1]] = \
-                self.ops[C_MOVES[turn][2]], self.ops[C_MOVES[turn][1]], self.ops[C_MOVES[turn][0]]
-            self.ops[C_MOVES[turn][0]] = last
+            rotate_one(self.ps, E_MOVES, turn)
+            rotate_one(self.ops, E_MOVES, turn)
+            rotate_one(self.ps, C_MOVES, turn)
+            rotate_one(self.ops, C_MOVES, turn)
 
             for num in C_MOVES[turn]:
                 self.ops[num] += self.ops[num] + CO[turn // 3]
@@ -100,27 +97,12 @@ class FastCube:
 
             if turn // 3 in [0, 5]:
                 for num in E_MOVES[turn]:
-                    self.ops[num] = 1 - self.ops[num]
+                    self.ops[num] ^= 1
         else:
-            last3, last2 = self.ps[E_MOVES[turn][3]], self.ps[E_MOVES[turn][2]]
-            self.ps[E_MOVES[turn][3]], self.ps[E_MOVES[turn][2]] = self.ps[E_MOVES[turn][1]], self.ps[
-                E_MOVES[turn][0]]
-            self.ps[E_MOVES[turn][0]], self.ps[E_MOVES[turn][1]] = last2, last3
-
-            last3, last2 = self.ops[E_MOVES[turn][3]], self.ops[E_MOVES[turn][2]]
-            self.ops[E_MOVES[turn][3]], self.ops[E_MOVES[turn][2]] = self.ops[E_MOVES[turn][1]], \
-                                                                     self.ops[E_MOVES[turn][0]]
-            self.ops[E_MOVES[turn][0]], self.ops[E_MOVES[turn][1]] = last2, last3
-
-            last3, last2 = self.ps[C_MOVES[turn][3]], self.ps[C_MOVES[turn][2]]
-            self.ps[C_MOVES[turn][3]], self.ps[C_MOVES[turn][2]] = self.ps[C_MOVES[turn][1]], self.ps[
-                C_MOVES[turn][0]]
-            self.ps[C_MOVES[turn][0]], self.ps[C_MOVES[turn][1]] = last2, last3
-
-            last3, last2 = self.ops[C_MOVES[turn][3]], self.ops[C_MOVES[turn][2]]
-            self.ops[C_MOVES[turn][3]], self.ops[C_MOVES[turn][2]] = self.ops[C_MOVES[turn][1]], \
-                                                                     self.ops[C_MOVES[turn][0]]
-            self.ops[C_MOVES[turn][0]], self.ops[C_MOVES[turn][1]] = last2, last3
+            rotate_two(self.ps, E_MOVES, turn)
+            rotate_two(self.ops, E_MOVES, turn)
+            rotate_two(self.ps, C_MOVES, turn)
+            rotate_two(self.ops, C_MOVES, turn)
 
         self.scramble.append(turn)
 
