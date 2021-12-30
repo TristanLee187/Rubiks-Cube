@@ -36,7 +36,8 @@ def g3_state(cube):
         ans |= (cube.ps[i] // 4) << (2 * i)
         i += 1
     while i < 20:
-        ans |= (((cube.ps[i] // 4) & 1) | (2 * (cube.ps[i] in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
+        ans |= (((cube.ps[i] // 4) & 1) | (2 * (cube.ps[i]
+                in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
         e += cube.ps[i] == C_OPPOSITES[i - 12]
         i += 1
     ans |= (e % 4) << (2 * i)
@@ -85,8 +86,8 @@ def phase_solve(cube, goal, check):
         clean_moves()
         return []
 
-    seen = set()
     while True:
+        seen = set()
         new_states = []
         for cube_state in states:
             for move in ALLOWED_MOVES[cube_state.scramble[-1] // 3]:
@@ -103,7 +104,6 @@ def phase_solve(cube, goal, check):
                     seen.add(next_state)
                     new_states.append(next_cube)
         states = new_states.copy()
-        seen.clear()
 
 
 def sub_cond(c):

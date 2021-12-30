@@ -12,7 +12,6 @@ short CO[] = {1, 2, 0, 2, 0, 1};
 
 void rotate(vector<short> &a, short b[][4], int c, int offset)
 {
-    int n = a.size();
     short w = a[b[c][(offset == 2) * 2 + (offset == 1) * 3]];
     short x = a[b[c][(offset == 2) * 3]];
     short y = a[b[c][2 - offset]];
@@ -76,12 +75,12 @@ struct FastCube
     }
 };
 
-int main()
-{
-    FastCube cube;
-    FastCube cube2 = cube;
-    cube.move(0);
-    cout << cube.toString();
-    cout << cube2.toString();
-    return 0;
-}
+// int main()
+// {
+//     FastCube cube;
+//     FastCube cube2 = cube;
+//     cube.move(0);
+//     cout << cube.toString();
+//     cout << cube2.toString();
+//     return 0;
+// }

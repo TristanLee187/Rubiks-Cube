@@ -1,6 +1,13 @@
 #include <iostream>
+#include <vector>
+#include <unordered_set>
 using namespace std;
+
 int main(){
-    cout << 2 << '\n';
-    return 0;
+    vector<int> a;
+    for (int i=0; i<5; i++){
+        a.push_back(i);
+    }
+    cout << a[a.size()-1];
+    cout << endl;
 }
