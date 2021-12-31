@@ -1,3 +1,6 @@
+# Takes the 54 stickers of a cube as input, and prints the piece and orientation
+# arrays to standard output, all on a single line, separated by spaces.
+
 from sys import argv
 
 PIECE_LAYOUT = [12, 0, 13, 4, -1, 5, 15, 1, 14, 12, 4, 15, 15, 1, 14, 14, 5, 13, 13, 0, 12, 11, -1, 10, 10, -1, 9, 9,

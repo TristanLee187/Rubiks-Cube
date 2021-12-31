@@ -1,3 +1,18 @@
+/*
+ * Main C++ file to be compiled and run outside the CPP_Solver folder
+ * Compiled using the -Ofast optimization flag to produce solver.out
+ * 
+ * Takes as input on the command line the 54 stickers of a cube, in standard
+ * orientation, from left to right and top to bottom, separated by spaces.
+ * 
+ * Passes these stickers to convert.py (using a subprocess) to generate the piece
+ * and orientation vectors of the FastCube object.
+ * 
+ * Creates a FastCube from these vectors, and calls FullSolve on it.
+ * 
+ * Prints the found solution to standard output.
+ */
+
 #include "FullSolve.h"
 #include <stdlib.h>
 #include <iostream>
@@ -30,12 +45,12 @@ string exec(string command)
     return result;
 }
 
-vector<string> scramble_num_to_str(vector<short> scramble)
+vector<string> scramble_num_to_str(vector<int> scramble)
 {
     vector<string> ans;
     string moves[] = {"U", "F", "R", "B", "L", "D"};
     string adds[] = {"", "\'", "2"};
-    for (short num : scramble)
+    for (int num : scramble)
     {
         ans.push_back(moves[num / 3] + adds[num % 3]);
     }
@@ -56,7 +71,7 @@ int main(int argc, char **argv)
     string cube_str = exec("pypy3 CPP_Solver/convert.py " + layout_string);
 
     FastCube cube(cube_str);
-    vector<short> sol;
+    vector<int> sol;
     sol = full_solve(cube);
     vector<string> solution;
     solution = scramble_num_to_str(sol);
