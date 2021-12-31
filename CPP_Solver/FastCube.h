@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 #include <iostream>
 using namespace std;
 
@@ -22,6 +23,28 @@ void rotate(vector<short> &a, short b[][4], int c, int offset)
     a[b[c][3]] = z;
 }
 
+vector<string> split(string s)
+{
+    vector<string> ans;
+    string word = "";
+    for (int i = 0; i < s.size(); i++)
+    {
+        string c = s.substr(i, 1);
+        if (c == " ")
+        {
+            ans.push_back(word);
+            word = "";
+        }
+        else
+        {
+            word += c;
+        }
+    }
+    if (word != " ")
+        ans.push_back(word);
+    return ans;
+}
+
 struct FastCube
 {
     vector<short> ps;
@@ -34,6 +57,16 @@ struct FastCube
         {
             ps.push_back(i);
             ops.push_back(0);
+        }
+    }
+
+    FastCube(string layout)
+    {
+        vector<string> layout_vector = split(layout);
+        for (int i = 0; i < 20; i++)
+        {
+            ps.push_back(stoi(layout_vector[i]));
+            ops.push_back(stoi(layout_vector[20 + i]));
         }
     }
 
@@ -74,13 +107,3 @@ struct FastCube
         return strps + strops;
     }
 };
-
-// int main()
-// {
-//     FastCube cube;
-//     FastCube cube2 = cube;
-//     cube.move(0);
-//     cout << cube.toString();
-//     cout << cube2.toString();
-//     return 0;
-// }

@@ -1,5 +1,4 @@
 #include "FastCube.h"
-#include <iostream>
 #include <unordered_set>
 using namespace std;
 
@@ -8,7 +7,7 @@ long long g1_state(FastCube cube)
     long long ans = 0;
     for (int i = 0; i < 12; i++)
     {
-        ans |= (long long) cube.ops[i] << i;
+        ans |= (long long)cube.ops[i] << i;
     }
     return ans;
 }
@@ -201,36 +200,17 @@ vector<short> phase_solve(FastCube &cube, FastCube goal, short check)
     }
 }
 
-vector<short> full_solve(FastCube cube){
+vector<short> full_solve(FastCube cube)
+{
+    populate_allowed_moves();
+    populate_remove();
     FastCube g;
     vector<short> ans;
-    for (int i=0; i<4; i++){
+    for (int i = 0; i < 4; i++)
+    {
         vector<short> phase = phase_solve(cube, g, i);
         for (short num : phase)
             ans.push_back(num);
     }
     return ans;
-}
-
-int main()
-{
-    populate_allowed_moves();
-    populate_remove();
-    FastCube cube;
-    FastCube g;
-    cube.move(0);
-    cube.move(5);
-    cube.move(3);
-    cube.move(10);
-    cube.move(1);
-    cube.move(14);
-    cube.move(5);
-    cube.move(9);
-    cube.move(12);
-    cube.move(15);
-    vector<short> ans = full_solve(cube);
-    for (short num : ans)
-        cout << num << " ";
-    cout << endl;
-    return 0;
 }
