@@ -39,7 +39,7 @@
 # of the Thistlethwaite algorithm's 4 stages.
 
 
-from convert import *
+from convert import convert
 
 
 E_MOVES = [

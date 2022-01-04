@@ -5,10 +5,6 @@
 # each stage: pypy3 tester.py 4, then enter the scramble on the next line
 
 
-from G1 import *
-from G2 import *
-from G3 import *
-from G4 import *
 from FullSolve import *
 import time
 from random import choice, random
@@ -34,7 +30,7 @@ def rta():
         for j in range(18):
             cube.move(j)
     # print(cube.ps)
-    return g4_state(cube)
+    return cube.ps
 
 
 def scrambler(c, scramble):
@@ -80,34 +76,6 @@ def scramble_num_to_str(scramble):
         add += ['', '\'', '2'][num % 3]
         ans += add + ' '
     return ans
-
-
-def test_4(cube):
-    g = FastCube()
-    t1, sol1 = speed_check(g1_solve, cube, g)
-    print("Time to G1:", t1)
-    print(scramble_num_to_str(sol1), '({} moves)'.format(len(sol1)))
-
-    t2, sol2 = speed_check(g2_solve, cube, g)
-    print("Time to G2:", t2)
-    print(scramble_num_to_str(sol2), '({} moves)'.format(len(sol2)))
-
-    t3, sol3 = speed_check(g3_solve, cube, g)
-    print("Time to G3:", t3)
-    print(scramble_num_to_str(sol3), '({} moves)'.format(len(sol3)))
-
-    t4, sol4 = speed_check(g4_solve, cube, g)
-    print("Time to G4:", t4)
-    print(scramble_num_to_str(sol4), '({} moves)'.format(len(sol4)))
-
-    total = t1 + t2 + t3 + t4
-    final = sol1 + sol2 + sol3 + sol4
-
-    print()
-    print("Total time:", total)
-    print('Solution:', scramble_num_to_str(final), '({} moves)'.format(len(final)))
-
-    return total, scramble_num_to_str(final)
 
 
 def test_full(cube):
@@ -169,12 +137,10 @@ def main():
         s = input('Scramble: ')
         s = scramble_str_to_num(s)
         scrambler(cube, s)
-        if mode == '4':
-            test_4(cube)
         if mode == 'full':
             test_full(cube)
 
 
 if __name__ == '__main__':
-    main()
-    # cProfile.run('main()')
+    # main()
+    cProfile.run('main()')

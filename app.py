@@ -208,12 +208,12 @@ def help_function():
         win2.blit(line, (20, spacing * (i+1)))
     pygame.display.update()
     clock = pygame.time.Clock()
-    run = True
-    while run:
+    to_run = True
+    while to_run:
         clock.tick()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                to_run = False
     win2.fill(GREY)
 
 
@@ -268,14 +268,14 @@ def main():
     clock = pygame.time.Clock()
     setup_win(cube)
 
-    run = True
-    while run:
+    to_run = True
+    while to_run:
         setup_buttons()
         clock.tick(FPS)
         pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                to_run = False
             if event.type == pygame.MOUSEMOTION:
                 handle_buttons(cube, 'move', pos)
             if event.type == pygame.MOUSEBUTTONDOWN:
