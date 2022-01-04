@@ -8,13 +8,14 @@ from sys import argv
 import time
 
 n = int(argv[1])
-py_times = []
+py_times_Solver = []
+py_times_FastSolver = []
 cpp_times = []
 for i in range(n):
     s = logic.gen_scramble(20)
     print('Scramble {}: '.format(i+1), *s)
 
-    # PyPy3 time
+    # PyPy3 Solver time
     cube = logic.Cube()
     logic.scrambler(cube, s)
     t0 = time.time()
@@ -22,8 +23,19 @@ for i in range(n):
     t1 = time.time()
     pysol = pysol.stdout.decode('utf-8').strip()
     # print('Solution: ' + pysol)
-    print("PyPy3 Time:", t1-t0, "seconds")
-    py_times.append(t1-t0)
+    print("PyPy3 Solver Time:", t1-t0, "seconds")
+    py_times_Solver.append(t1-t0)
+
+    # PyPy3 FastSolver time
+    cube = logic.Cube()
+    logic.scrambler(cube, s)
+    t0 = time.time()
+    pyfsol = run(['pypy3', 'FastSolver/solver.py', cube.__str__()], capture_output=True)
+    t1 = time.time()
+    pyfsol = pyfsol.stdout.decode('utf-8').strip()
+    # print('Solution: ' + pyfsol)
+    print("PyPy3 FastSolver Time:", t1-t0, "seconds")
+    py_times_FastSolver.append(t1-t0)
 
     # CPP time
     cube = logic.Cube()
@@ -36,15 +48,12 @@ for i in range(n):
     print("C++ Time:", t1-t0, "seconds")
     cpp_times.append(t1-t0)
 
-    if pysol == cppsol:
-        print("Solutions match")
-        print('Solution: ' + pysol)
-    else:
-        print("Solutions do not match!")
-        print('PyPy Solution: ' + pysol)
-        print('C++ Solution: ' + cppsol)
+    print('PyPy Solver Solution: ' + pysol)
+    print('PyPy FastSolver Solution: ' + pyfsol)
+    print('C++ Solution: ' + cppsol)
     print()
 
 print('Summary:')
-print("Average PyPy3 time: {}".format(sum(py_times)/n))
+print("Average PyPy3 Solver time: {}".format(sum(py_times_Solver)/n))
+print("Average PyPy3 FastSolver time: {}".format(sum(py_times_FastSolver)/n))
 print("Average C++ time: {}".format(sum(cpp_times)/n))
