@@ -1,8 +1,6 @@
 # Using this tester:
 # Mass testing of the solver from FullSolve: pypy3 tester.py Tests n, where n is the number of random scrambles to test
 # Single test of the solver from FullSolve: pypy3 tester.py full, then enter the scramble on the next line
-# Single test of a solver using each of the individual stage files, which also shows the time taken and solution for
-# each stage: pypy3 tester.py 4, then enter the scramble on the next line
 
 
 from FullSolve import *
@@ -142,5 +140,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
-    cProfile.run('main()')
+    main()
+    # cProfile.run('main()')

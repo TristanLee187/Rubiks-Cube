@@ -1,4 +1,7 @@
-import time
+# Rubik's cube class similar to that found in Solver/, but each cube now stores its g1, g2, g3, and g4 states as fields,
+# and moves affect these states directly. These objects have an array for representing piece locations, but not their
+# orientations like the FastCubes of Solver/.
+
 from convert import convert
 
 E_MOVES = [
@@ -167,7 +170,7 @@ class FastCube:
         self.g2 = 15
         self.g3 = 734433793280
         self.g4 = 1048575
-        self.ps = [i for i in range(20)]
+        self.ps = list(range(20))
         self.scramble = []
         self.funcs = [ps_rotate, g1_rotate, g2_rotate, g3_rotate, g4_rotate]
         if layout:
@@ -209,23 +212,3 @@ class FastCube:
         ans.scramble = self.scramble.copy()
         ans.funcs = self.funcs
         return ans
-
-
-def test():
-    t0 = time.time()
-    # for j in range(18):
-    #     cube = FastCube([i for i in range(20)])
-    #     cube.move(j)
-    #     print(cube.g1)
-    cube = FastCube()
-    for i in range(10 ** 6):
-        for j in range(18):
-            copy = cube.__copy__()
-    t1 = time.time()
-    print(cube.g3)
-    print(t1 - t0)
-    print()
-
-
-if __name__ == '__main__':
-    test()
