@@ -1,5 +1,6 @@
-# Takes the 54 stickers of a cube as input, and prints the piece and orientation
-# arrays to standard output, all on a single line, separated by spaces.
+# takes the 54 stickers of a cube as input, and prints the piece vector and
+# G1, G2, G3, and G4 states to standard output, all on a single line, 
+# separated by spaces
 
 from sys import argv
 
@@ -14,6 +15,52 @@ FACES = [
     [9, 10, 11, 21, 22, 23, 33, 34, 35],
     list(range(45, 54))
 ]
+
+
+def g1_state(ops):
+    ans = 0
+    for i in range(12):
+        ans |= ops[i] << i
+    return ans
+
+
+def g2_state(ps, ops):
+    ans = 0
+    i = 0
+    while i < 12:
+        ans |= (ps[i] // 4 == 0) << i
+        i += 1
+    while i < 20:
+        ans |= ops[i] << (12 + 2 * (i - 12))
+        i += 1
+    return ans
+
+
+C_OPPOSITES = [
+    14, 15, 12, 13, 18, 19, 16, 17
+]
+
+
+def g3_state(ps):
+    ans = 0
+    i = 0
+    e = 0
+    while i < 12:
+        ans |= (ps[i] // 4) << (2 * i)
+        i += 1
+    while i < 20:
+        ans |= (((ps[i] // 4) & 1) | (2 * (ps[i] in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
+        e += ps[i] == C_OPPOSITES[i - 12]
+        i += 1
+    ans |= (e % 4) << (2 * i)
+    return ans
+
+
+def g4_state(ps):
+    ans = 0
+    for i in range(20):
+        ans |= (ps[i] == i) << i
+    return ans
 
 
 def def_piece(piece, colors_to_nums, top_color, left_color, front_color, right_color, back_color, bottom_color):
@@ -72,7 +119,7 @@ def convert(stickers):
                              (front_color, left_color, top_color): 15, (back_color, left_color, bottom_color): 16,
                              (back_color, right_color, bottom_color): 17, (front_color, right_color, bottom_color): 18,
                              (front_color, left_color, bottom_color): 19}
-    pieces_colors_to_nums = {tuple(sorted([i[0] for i in piece])): pieces_colors_to_nums[piece] for piece in
+    pieces_colors_to_nums = {tuple(sorted([i[0] for i in piece])):pieces_colors_to_nums[piece] for piece in
                              pieces_colors_to_nums}
     z = list(zip(PIECE_LAYOUT, stickers))
     pieces = [[] for _ in range(20)]
@@ -88,12 +135,12 @@ def convert(stickers):
         ps.append(ans[0])
         ops.append(ans[1])
 
-    return ps, ops
+    return [ps, g1_state(ops), g2_state(ps, ops), g3_state(ps), g4_state(ps)]
 
 
 def main():
-    ps, ops = convert(argv[1:55])
-    print(' '.join(map(str, ps + ops)))
+    ps, g1, g2, g3, g4 = convert(argv[1:55])
+    print(' '.join(map(str, ps + [g1, g2, g3, g4])))
 
 
 if __name__ == '__main__':

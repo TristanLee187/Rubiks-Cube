@@ -18,17 +18,13 @@ def speed_check(f, *args):
 
 
 def rta():
-    # print(g3_state(cube))
-    # for j in range(18):
-    #     cube = FastCube()
-    #     cube.move(j)
-    #     print(g1_state(cube))
     cube=FastCube()
-    for i in range(10**6):
-        for j in range(18):
-            cube.move(j)
-    # print(cube.ps)
-    return cube.ps
+    cube.phase = 0
+    for i in range(10**7):
+        cube.move(0)
+    print(cube.g1)
+    print(cube.g2)    
+    return cube.g4
 
 
 def scrambler(c, scramble):
@@ -140,5 +136,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
-    cProfile.run('main()')
+    main()
+    # cProfile.run('main()')
