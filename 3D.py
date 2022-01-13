@@ -359,7 +359,7 @@ def handle_keys():
         print("Scramble:", *scramble)
     elif keys[pygame.K_SPACE]:
         print('Solving...')
-        sol = run(['pypy3', 'Solver/solver.py', CUBE.__str__()], capture_output=True)
+        sol = run(['CPP_FastSolver/solver.out', *CUBE.__str__().split()], capture_output=True)
         sol = sol.stdout.decode('utf-8').strip()
         print('Solution: ' + sol)
         scramble += sol.split()

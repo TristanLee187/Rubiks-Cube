@@ -1,11 +1,14 @@
 Hello there!
 This virtual Rubik's Cube supports the following:
 
-1: Start a terminal based interactive script:
+1: Set up the C++ solver used in all the programs:
+      'make build'
+
+2: Start a terminal based interactive script:
       'make interact'
 
-2: Start a PyGame based application:
+3: Start a PyGame based application:
       'make app'
 
-3: Start an PyGame and PyOpenGL based application:
+4: Start an PyGame and PyOpenGL based application:
       'make 3D'

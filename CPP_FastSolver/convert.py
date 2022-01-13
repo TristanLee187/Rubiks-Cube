@@ -1,5 +1,5 @@
-# takes the 54 stickers of a cube as input, and prints the piece vector and
-# G1, G2, G3, and G4 states to standard output, all on a single line, 
+# takes the 54 stickers of a cube as input (as 54 command lines arguments), and prints
+# the piece vector and G1, G2, G3, and G4 states to standard output, all on a single line,
 # separated by spaces
 
 from sys import argv
@@ -49,7 +49,8 @@ def g3_state(ps):
         ans |= (ps[i] // 4) << (2 * i)
         i += 1
     while i < 20:
-        ans |= (((ps[i] // 4) & 1) | (2 * (ps[i] in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
+        ans |= (((ps[i] // 4) & 1) |
+                (2 * (ps[i] in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
         e += ps[i] == C_OPPOSITES[i - 12]
         i += 1
     ans |= (e % 4) << (2 * i)
@@ -119,7 +120,7 @@ def convert(stickers):
                              (front_color, left_color, top_color): 15, (back_color, left_color, bottom_color): 16,
                              (back_color, right_color, bottom_color): 17, (front_color, right_color, bottom_color): 18,
                              (front_color, left_color, bottom_color): 19}
-    pieces_colors_to_nums = {tuple(sorted([i[0] for i in piece])):pieces_colors_to_nums[piece] for piece in
+    pieces_colors_to_nums = {tuple(sorted([i[0] for i in piece])): pieces_colors_to_nums[piece] for piece in
                              pieces_colors_to_nums}
     z = list(zip(PIECE_LAYOUT, stickers))
     pieces = [[] for _ in range(20)]

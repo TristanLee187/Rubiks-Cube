@@ -9,3 +9,6 @@ help:
 
 3D:
 	@python3 3D.py
+
+build:
+	@clang++ CPP_FastSolver/solver.cpp -o CPP_FastSolver/solver.out -Ofast

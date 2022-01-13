@@ -1,5 +1,8 @@
 /*
- * C++ implementation of the FastCube struct
+ * C++ implementation of the FastCube object, with modifications for performance.
+ * Rather than keeping track of piece locations and orientations and then calculating
+ * G1 through G4 states after each move, we can keep track of the states instead 
+ * and have each move affect the states directly.
  */
 
 #include <vector>

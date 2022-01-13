@@ -37,7 +37,7 @@ def g3_state(cube):
         i += 1
     while i < 20:
         ans |= (((cube.ps[i] // 4) & 1) | (2 * (cube.ps[i]
-                in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
+                                                in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
         e += cube.ps[i] == C_OPPOSITES[i - 12]
         i += 1
     ans |= (e % 4) << (2 * i)
@@ -106,36 +106,19 @@ def phase_solve(cube, goal, check):
         states = new_states.copy()
 
 
-def sub_cond(c):
-    collect = defaultdict(int)
-    for move in c:
-        turn = move % 3
-        collect[move // 3] += (1 + (turn >> 1)) - 2 * (turn & 1)
-    ans = []
-    for move in collect:
-        turns = collect[move] % 4
-        if turns:
-            turn = (turns >> 1) + (not (turns & 1))
-            ans.append(3 * move + turn)
-    return ans
-
-
 def cond(s):
-    axes = {0: 0, 15: 0, 3: 1, 9: 1, 6: 2, 12: 2}
+    if len(s) == 0:
+        return s
+    mod_to_turn = {0:1, 1:-1, 2:2}
     ans = [s[0]]
-    p = 0
     for i in range(1, len(s)):
-        move = s[i]
-        axis = axes[move - move % 3]
-        if not ans or axis != axes[ans[p] - ans[p] % 3]:
-            ans.append(move)
-            p = len(ans) - 1
+        if s[i] - s[i] % 3 == ans[-1] - ans[-1] % 3:
+            move = s[i] - s[i] % 3
+            turns = (mod_to_turn[s[i] % 3] + mod_to_turn[ans[-1] % 3]) % 4
+            ans.pop()
+            ans.append(move + min(turns, 4 - turns))
         else:
-            sub = sub_cond(ans[p:] + [move])
-            ans[p:] = []
-            ans += sub
-            if not sub:
-                p -= 1
+            ans.append(s[i])
     return ans
 
 

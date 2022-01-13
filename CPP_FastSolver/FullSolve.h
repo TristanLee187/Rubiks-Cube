@@ -1,10 +1,17 @@
 /*
- * C++ implementation of Thistlethwaite's algorithm
+ * C++ implementation of Thistlethwaite's algorithm.
+
+ * An overview of full_solve():
+ * First populates the vectors for allowed moves and move removed during each stage.
+ * Then goes through each stage with BFS and pruning, and adds the solutions to each
+ * stage to the final vector<int>.
+ * Returns the final vector.
  */
 
 #include "FastCube.h"
 #include <unordered_set>
 #include <iostream>
+#include <map>
 using namespace std;
 
 vector<vector<int> > ALLOWED_MOVES;
@@ -306,6 +313,33 @@ vector<int> g4_solve(FastCube &cube, FastCube goal)
     }
 }
 
+vector<int> cond(vector<int> s)
+{
+    if (s.size() == 0)
+        return s;
+    map<int, int> mod_to_turn;
+    mod_to_turn[0] = 1;
+    mod_to_turn[1] = -1;
+    mod_to_turn[2] = 2;
+    vector<int> ans;
+    ans.push_back(s[0]);
+    for (int i = 1; i < s.size(); i++)
+    {
+        if (s[i] - s[i] % 3 == ans[ans.size() - 1] - ans[ans.size() - 1] % 3)
+        {
+            int move = s[i] - s[i] % 3;
+            int turns = (mod_to_turn[s[i] % 3] + mod_to_turn[ans[ans.size() - 1] % 3]) % 4;
+            ans.pop_back();
+            ans.push_back(move + min(turns, 4 - turns));
+        }
+        else
+        {
+            ans.push_back(s[i]);
+        }
+    }
+    return ans;
+}
+
 vector<int> full_solve(FastCube cube)
 {
     populate_allowed_moves();
@@ -332,5 +366,5 @@ vector<int> full_solve(FastCube cube)
         ans.push_back(num);
     // cout << "g4 done" << endl;
 
-    return ans;
+    return cond(ans);
 }
