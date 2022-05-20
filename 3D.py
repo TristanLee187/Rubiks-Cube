@@ -7,6 +7,7 @@ from math import sin, cos, ceil, radians
 from subprocess import run
 
 pygame.init()
+pygame.display.set_caption('Rubik\'s Cube')
 
 WIDTH = 800
 HEIGHT = 600
