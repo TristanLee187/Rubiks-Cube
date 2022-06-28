@@ -169,6 +169,7 @@ def main():
         s = input('Scramble: ')
         s = scramble_str_to_num(s)
         scrambler(cube, s)
+        print(g3_state(cube))
         if mode == '4':
             test_4(cube)
         if mode == 'full':
