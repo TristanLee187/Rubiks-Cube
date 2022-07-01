@@ -1,5 +1,5 @@
 /*
- * C++ implementation of Thistlethwaite's algorithm.
+ * C++ implementation of my modified Thistlethwaite's algorithm.
 
  * An overview of full_solve():
  * First populates the vectors for allowed moves and move removed during each stage.
@@ -321,6 +321,10 @@ vector<int> cond(vector<int> s)
     mod_to_turn[0] = 1;
     mod_to_turn[1] = -1;
     mod_to_turn[2] = 2;
+    map<int, int> turn_to_mod;
+    turn_to_mod[1] = 0;
+    turn_to_mod[2] = 2;
+    turn_to_mod[3] = 1;
     vector<int> ans;
     ans.push_back(s[0]);
     for (int i = 1; i < s.size(); i++)
@@ -330,7 +334,8 @@ vector<int> cond(vector<int> s)
             int move = s[i] - s[i] % 3;
             int turns = (mod_to_turn[s[i] % 3] + mod_to_turn[ans[ans.size() - 1] % 3]) % 4;
             ans.pop_back();
-            ans.push_back(move + min(turns, 4 - turns));
+            if (turns)
+                ans.push_back(move + turn_to_mod[turns]);
         }
         else
         {

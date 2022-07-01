@@ -24,17 +24,11 @@ def speed_check(f, *args):
 
 
 def rta():
-    # print(g3_state(cube))
-    # for j in range(18):
-    #     cube = FastCube()
-    #     cube.move(j)
-    #     print(g1_state(cube))
-    cube=FastCube()
+    cube = FastCube()
     for i in range(10**6):
         for j in range(18):
             cube.move(j)
-    # print(cube.ps)
-    return g4_state(cube)
+    return 0
 
 
 def scrambler(c, scramble):
@@ -169,7 +163,6 @@ def main():
         s = input('Scramble: ')
         s = scramble_str_to_num(s)
         scrambler(cube, s)
-        print(g3_state(cube))
         if mode == '4':
             test_4(cube)
         if mode == 'full':

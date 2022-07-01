@@ -12,8 +12,8 @@ G4_ALLOWED_MOVES = [
 ]
 
 
-# G4 requirement: all pieces are in their correct location:
-# Important information: whether or not a location and the piece at that location match, at every location.
+# G4 requirement: all pieces are in their correct location.
+# Important information: whether or not the piece at each location belongs there.
 def g4_state(cube):
     ans = 0
     for i in range(20):

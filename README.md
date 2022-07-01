@@ -1,5 +1,5 @@
 # Rubik's Cube
-3 Interactive Rubik's Cube programs and a solver implementing Thistlethwaite's Algorithm, written in Python and C++
+3 Interactive Rubik's Cube programs and a solver implementing a slightly modified Thistlethwaite's Algorithm, written in Python and C++
 
 
 ## Requirements
@@ -111,7 +111,7 @@ This program uses PyOpenGL to render a cube object in 3D, and wraps that renderi
 
 ## Notes on the Solver
 
-### My solver implements Thistlethwaite's Algorithm to solve the cube, detailed below.
+### My solver implements Thistlethwaite's Algorithm to solve the cube, with a slight modification, detailed below.
 
 At a high level, the algorithm works by progressing through 4 stages. The cube must meet certain requirements to reach
 each stage; once a stage is met, some moves are removed from the set of moves needed to solve the cube, such that the

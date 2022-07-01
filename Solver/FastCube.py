@@ -36,7 +36,7 @@
 #     12: L
 #     15: D
 # The scramble field is only used in solving the cube; it keeps track of the moves done on the cube in each
-# of the Thistlethwaite algorithm's 4 stages.
+# of my slightly modified Thistlethwaite algorithm's 4 stages.
 
 
 from convert import convert
@@ -79,9 +79,13 @@ class FastCube:
 
     def move(self, turn):
         offset = ((turn % 3) >> 1)+1
+        # rotate edge pieces in the piece array
         rotate(self.ps, E_MOVES, turn, offset)
+        # rotate edge pieces in the orientation array
         rotate(self.ops, E_MOVES, turn, offset)
+        # rotate the corner pieces in the piece array
         rotate(self.ps, C_MOVES, turn, offset)
+        # rotate the corner pieces in the orientation array
         rotate(self.ops, C_MOVES, turn, offset)
 
         if offset == 1:

@@ -17,10 +17,11 @@ C_OPPOSITES = [
 ]
 
 
-# G3 requirement: all edges must be in their home slice (E or S slice), all corners must be in their home face (U or D
-# face), and the number of corners directly opposite their correct location must be a multiple of 4.
-# Important information: the home slice of each of edge piece at each location, the home slice of each corner modulo 2
-# at each location, and the number of corners opposite their correct location modulo 4.
+# Modified G3 requirement: all edges must be in their home slice (E or S slice, M slice is already to correct from G2),
+# all corners must be in their home face (U or D face), and the parity of the scramble (the number of corners that are
+# opposite their correct location) is even.
+# Important information: home slice of each edge at each location, home face of each corner at each location modulo 2,
+# and the number of corners opposite their correct location modulo 4.
 def g3_state(cube):
     ans = 0
     i = 0

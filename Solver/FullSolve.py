@@ -1,4 +1,4 @@
-# The implementation of Thistlethwaite's algorithm, see the README for details.
+# The implementation of my slightly modified Thistlethwaite's algorithm, see the README for details.
 
 from FastCube import FastCube
 from collections import defaultdict
@@ -36,8 +36,7 @@ def g3_state(cube):
         ans |= (cube.ps[i] // 4) << (2 * i)
         i += 1
     while i < 20:
-        ans |= (((cube.ps[i] // 4) & 1) | (2 * (cube.ps[i]
-                                                in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
+        ans |= (((cube.ps[i] // 4) & 1) | (2 * (cube.ps[i] in [i, C_OPPOSITES[i - 12]]))) << (2 * i)
         e += cube.ps[i] == C_OPPOSITES[i - 12]
         i += 1
     ans |= (e % 4) << (2 * i)
@@ -110,13 +109,15 @@ def cond(s):
     if len(s) == 0:
         return s
     mod_to_turn = {0:1, 1:-1, 2:2}
+    turn_to_mod = {1:0, 2:2, 3:1}
     ans = [s[0]]
     for i in range(1, len(s)):
         if s[i] - s[i] % 3 == ans[-1] - ans[-1] % 3:
             move = s[i] - s[i] % 3
             turns = (mod_to_turn[s[i] % 3] + mod_to_turn[ans[-1] % 3]) % 4
             ans.pop()
-            ans.append(move + min(turns, 4 - turns))
+            if turns:
+                ans.append(move + turn_to_mod[turns])
         else:
             ans.append(s[i])
     return ans

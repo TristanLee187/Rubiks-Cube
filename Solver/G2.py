@@ -15,7 +15,7 @@ G2_ALLOWED_MOVES = [
 
 # G2 requirement: all corners are oriented correctly (left or right sticker must point left or right), and edges in the
 # M slice must all belong in the M slice.
-# Important information: orientation of the corners, and whether or not the edge at each location in the M slice belongs
+# Important information: orientation of the corners, and the locations of each of the M slice edges.
 def g2_state(cube):
     ans = 0
     i = 0
