@@ -1,5 +1,5 @@
 # Rubik's Cube
-3 Interactive Rubik's Cube programs and a solver implementing a slightly modified Thistlethwaite's Algorithm, written in Python and C++
+3 Interactive Rubik's Cube programs and a solver implementing a slightly modified Thistlethwaite's Algorithm, written in Python and C++.
 
 
 ## Requirements
@@ -111,11 +111,10 @@ This program uses PyOpenGL to render a cube object in 3D, and wraps that renderi
 
 ## Notes on the Solver
 
-### My solver implements Thistlethwaite's Algorithm to solve the cube, with a slight modification, detailed below.
+### My solver implements a slightly modified version of Thistlethwaite's Algorithm to solve the cube. Thistlethwaite's Algorithm without any modification is detailed below.
 
 At a high level, the algorithm works by progressing through 4 stages. The cube must meet certain requirements to reach
-each stage; once a stage is met, some moves are removed from the set of moves needed to solve the cube, such that the
-requirements of one stage carry over into the next.
+each stage; once a stage is met, some moves are removed from the set of moves needed to solve the cube, such that the requirements of one stage carry over into the next.
 
 For example, the first stage consists of the set of any state of the cube (G<sub>0</sub>), and the set of moves needed 
 to reach the second stage (all 18 moves). For a cube to meet the requirements of the second stage, all the edges must be oriented
@@ -139,27 +138,30 @@ Below are the details for each stage:
 * G<sub>0</sub> &rarr; G<sub>1</sub>
   * All 18 moves are allowed.
   * G<sub>1</sub> requirement: all edges must be "good", or able to be solved without 90 degree turns of the U or D face.
-  * Important information: orientation of the edges at each location.
 
 * G<sub>1</sub> &rarr; G<sub>2</sub>
   * All moves besides `U`, `U'`, `D`, or `D'` are allowed, which makes for `U2, F, F', F2, R, R', R2, B, B', B2, L, L', L2, D2`.
   * G<sub>2</sub> requirement: all corners are oriented correctly (left or right sticker must point left or right), and edges in 
 the M slice must all belong in the M slice.
-  * Important information: orientation of the corners, and if the edge at each location in the M slice belongs or 
-doesn't.
 
 * G<sub>2</sub> &rarr; G<sub>3</sub> 
   * All moves from G<sub>1</sub> &rarr; G<sub>2</sub> are allowed besides `F`, `F'`, `B`, and `B'`, which makes for `U2, F2, R, R', R2, B2, L, L', L2, 
 D2`.
-  * G<sub>3</sub> requirement: all edges must be in their home slice (E or S slice), all corners must be in their home face 
-(U or D face), and the number of corners directly opposite their correct location must be a multiple of 4.
-  * Important information: the home slice of each of edge piece at each location, the home slice of each corner modulo 
-2 at each location, and the number of corners opposite their correct location modulo 4.
+  * G<sub>3</sub> requirement: all edges must be in their home slice (E or S slice), all corners must be positionsed such that all stickers on any 1 of the 6 faces of the cube contain are either the correct color or opposite the correct color.
 
 * G<sub>3</sub> &rarr; G<sub>4</sub>
   * Allowed moves: `U2, F2, R2, B2, L2, D2`.
   * G<sub>4</sub> requirement: all pieces are in their correct location.
-  * Important information: whether a location and the piece at that location match or not, at every location.
+
+The algorithm that I implement differs slightly from Thistlethwaite's Algorithm, specifically in the G<sub>3</sub> stage. My third stage is detailed below:
+
+* G<sub>2</sub> &rarr; G<sub>3</sub> 
+  * All moves from G<sub>1</sub> &rarr; G<sub>2</sub> are allowed besides `F`, `F'`, `B`, and `B'`, which makes for `U2, F2, R, R', R2, B2, L, L', L2, 
+D2`.
+  * G<sub>3</sub> requirement: all edges must be in their home slice (E or S slice), all corners must be in their home slice (U or D face), and the number of corners opposite their correct location must be equal to 0 module 4.
+
+My third stage has a stricter requirement than that of Thistlethwaite's Algorithm: the set of all cube states that follow my third stage requirement is a proper subset of G<sub>3</sub>. This should theoretically lead to larger move counts in the solution, but in my tests the solution lengths are very comparable. I chose to use this different third stage because it was both easier to implement in code and ran slightly faster.
+
 
 ### Implementation Notes
 
