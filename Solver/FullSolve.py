@@ -1,7 +1,6 @@
 # The implementation of my slightly modified Thistlethwaite's algorithm, see the README for details.
 
 from FastCube import FastCube
-from collections import defaultdict
 
 
 def g1_state(cube):

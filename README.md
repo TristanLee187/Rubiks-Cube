@@ -153,6 +153,8 @@ D2`.
   * Allowed moves: `U2, F2, R2, B2, L2, D2`.
   * G<sub>4</sub> requirement: all pieces are in their correct location.
 
+#### My modified algorithm:
+
 The algorithm that I implement differs slightly from Thistlethwaite's Algorithm, specifically in the G<sub>3</sub> stage. My third stage is detailed below:
 
 * G<sub>2</sub> &rarr; G<sub>3</sub> 
