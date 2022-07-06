@@ -13,8 +13,7 @@ cpp_fast_times = []
 py_lengths = []
 cpp_lengths = []
 for i in range(n):
-    # s = logic.gen_scramble(20)
-    s = '''L2 D U2 B' D2 U B D2 B2 R' F' U' L2 F' U' D R U2 F2 D2'''.split()
+    s = logic.gen_scramble(20)
     print('Scramble {}: '.format(i + 1), *s)
 
     # PyPy3 Solver time
